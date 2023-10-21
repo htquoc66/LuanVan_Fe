@@ -1,0 +1,14 @@
+INSERT INTO `permissions` VALUES (6,'Xem danh sách khách hàng','Quản lý khách hàng',1,NULL,NULL),
+(7,'Thêm khách hàng mới','Quản lý khách hàng',1,NULL,NULL),(8,'Chỉnh sửa khách hàng','Quản lý khách hàng',1,NULL,NULL),
+(9,'Khóa tài khoản khách hàng','Quản lý khách hàng',1,NULL,NULL),(10,'Xem danh sách hồ sơ','Quản lý hồ sơ',2,NULL,NULL),
+(11,'Thêm hồ sơ mới','Quản lý hồ sơ',2,NULL,NULL),(12,'Cập nhật hồ sơ','Quản lý hồ sơ',2,NULL,NULL),
+(13,'Duyệt hồ sơ','Quản lý hồ sơ',2,NULL,NULL),(14,'Xóa hồ sơ','Quản lý hồ sơ',2,NULL,NULL),
+(15,'Xem danh sách','Quản lý căn cứ pháp luật',3,NULL,NULL),(16,'Thêm văn cứ pháp luật','Quản lý căn cứ pháp luật',3,NULL,NULL),
+(17,'Cập nhật căn cứ pháp luật','Quản lý căn cứ pháp luật',3,NULL,NULL),(18,'Xóa căn cứ pháp luật','Quản lý căn cứ pháp luật',3,NULL,NULL),
+(19,'Xem danh sách biểu mẫu','Quản lý biểu mẫu',4,NULL,NULL),
+(20,'Thêm biểu mẫu','Quản lý biểu mẫu',4,NULL,NULL),(21,'Cập nhật biểu mẫu','Quản lý biểu mẫu',4,NULL,NULL),
+(22,'Xóa biểu mẫu','Quản lý biểu mẫu',4,NULL,NULL),(23,'Xem danh sách nhân viên','Quản lý nhân viên',5,NULL,NULL),
+(24,'Thêm nhân viên mới','Quản lý nhân viên',5,NULL,NULL),(25,'Cập nhật nhân viên','Quản lý nhân viên',5,NULL,NULL),
+(26,'Khóa tài khoản nhân viên','Quản lý nhân viên',5,NULL,NULL),(27,'Xem danh sách danh mục','Quản lý danh mục',6,NULL,NULL),
+(28,'Thêm danh mục mới','Quản lý danh mục',6,NULL,NULL),(29,'Cập nhật danh mục','Quản lý danh mục',6,NULL,NULL),(
+30,'Xóa danh mục','Quản lý danh mục',6,NULL,NULL);

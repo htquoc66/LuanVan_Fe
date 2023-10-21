@@ -1,0 +1,29 @@
+.topbar{
+    background-color: #19315D;
+    padding: 4px 0;
+}
+.menu {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+.menu .item {
+    height: 100%;
+    font-weight: 600;
+    list-style: none;
+}
+
+.menu .item a{
+    display: block;
+    padding: 14px 20px;
+}
+
+.menu .item:hover {
+    cursor: pointer;
+    background-color: #eee;
+}
+
+.active{
+    background-color: #eee;
+}
