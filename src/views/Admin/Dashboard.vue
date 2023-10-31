@@ -51,27 +51,26 @@
                     <i class="fa-solid fa-file-excel"></i> Xuất Excel
                 </button>
             </div>
-            <div class="col-4">
+            <div class="col-8">
                 <div class="card cardChar p-3">
                     <div>
                         Từ ngày: <input v-model="minDate1" type="date" @change="updateChart">
                         đến <input v-model="maxDate1" type="date" @change="updateChart">
                     </div>
-                    <div class="p-4">
+                    <div class="p-2">
+                        <canvas id="chartBar"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card cardChar p-3">
+                    <h6 class="text-blue">Số lượng hồ sơ theo loại</h6>
+                    <div class="p-3 mt-3">
                         <canvas id="chartPie"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-8">
-                <div class="card cardChar p-3">
-                    <div class="p-4">
-                        <canvas id="chartBar"></canvas>
-                    </div>
-                </div>
 
-
-
-            </div>
         </div>
         <div class="row mt-3">
             <div class="col-12">

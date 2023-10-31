@@ -1,5 +1,5 @@
 .topbar{
-    background-color: #19315D;
+    background-color: #123e8f;
     padding: 4px 0;
 }
 .menu {
@@ -12,6 +12,7 @@
     height: 100%;
     font-weight: 600;
     list-style: none;
+    text-transform: uppercase;
 }
 
 .menu .item a{

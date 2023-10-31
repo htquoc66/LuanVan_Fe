@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h3 class="text-center text-blue py-4">Đặt lịch công chứng</h3>
+    <H4 class="text-center text-blue py-4">ĐẶT LỊCH CÔNG CHỨNG</H4>
     <div class="calendar">
       <div class="mb-3">
         <div>

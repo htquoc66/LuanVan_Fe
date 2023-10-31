@@ -28,7 +28,7 @@
                         </RouterLink>
                     </div>
 
-                    <div v-if="hasPermission(2)" class="item" :class="{ active: $route.path === '/admin/notarizedDocuments/listInvoices' }">
+                    <div v-if="hasPermission(2) || hasPermission(1)" class="item" :class="{ active: $route.path === '/admin/notarizedDocuments/listInvoices' }">
                         <RouterLink class="text-dark" to="/admin/notarizedDocuments/listInvoices">
                             <i class="fa-solid fa-print px-2"></i>
                             <span>Phiếu thu & hóa đơn</span>

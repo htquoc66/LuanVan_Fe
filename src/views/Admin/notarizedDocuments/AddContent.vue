@@ -2,13 +2,13 @@
     <div class="modal-container" v-show="showModalAddContent">
         <div class="modal-overlay" @click="close"></div>
         <div class="modal-content" style="width: 70vw;">
-            <div v-if="selectedForm == 1">
+            <div v-if="selectedForm != null && selectedForm.id == 1">
                 <div class="form-group">
                     <label class="form-label">Nội dung ủy quyền:</label>
                     <textarea v-model="uy_quyen.noi_dung" class="form-control"></textarea>
                 </div>
             </div>
-            <div v-if="selectedForm == 2">
+            <div v-if="selectedForm != null && selectedForm.id == 2">
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group mb-3">
@@ -67,7 +67,7 @@
                 </div>
 
             </div>
-            <div v-if="selectedForm == 3">
+            <div v-if="selectedForm != null && selectedForm.id == 3">
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group mb-3">
@@ -239,6 +239,32 @@ export default {
                 gt_chu: '',
                 pttt: '',
                 ten_ccv: ''
+            },
+            info: {
+                ten_file: '',
+                ten_file_moi: 'hosomoi.docx',
+                ngay_thang: '',
+                ten_a1: '',
+                nam_sinh_a1: '',
+                cccd_a1: '',
+                ngay_cccd_a1: '',
+                dia_chi_a1: '',
+                ten_a2: '',
+                nam_sinh_a2: '',
+                cccd_a2: '',
+                ngay_cccd_a2: '',
+                dia_chi_a2: '',
+                ten_b1: '',
+                nam_sinh_b1: '',
+                cccd_b1: '',
+                ngay_cccd_b1: '',
+                dia_chi_b1: '',
+                ten_b2: '',
+                nam_sinh_b2: '',
+                cccd_b2: '',
+                ngay_cccd_b2: '',
+                dia_chi_b2: '',
+                ten_ccv: ''
             }
         }
     },
@@ -248,7 +274,7 @@ export default {
             required: true,
         },
         selectedForm: {
-            type: Number,
+            type: Object,
             required: null,
         },
         notarizedDocument: {
@@ -265,7 +291,7 @@ export default {
     methods: {
         formatDate, convertNumberToWords,formatPrice,
         createContent() {
-            if (this.selectedForm == 1) {
+            if (this.selectedForm.id == 1) {
                 this.uy_quyen.ngay_thang = formatDate(this.notarizedDocument.date);
                 this.uy_quyen.ten_ccv = this.notarizedDocument.notary.name;
                 if (this.notarizedDocument.customersA.length > 0) {
@@ -283,7 +309,7 @@ export default {
                     this.uy_quyen.dia_chi_b = this.notarizedDocument.customersB[0].address;
                 }
             }
-            if (this.selectedForm == 2) {
+            else if (this.selectedForm.id == 2) {
                 this.chuyen_nhuong_dat.ten_ccv = this.notarizedDocument.notary.name;
                 this.chuyen_nhuong_dat.ngay_thang = formatDate(this.notarizedDocument.date);
                 this.chuyen_nhuong_dat.gt_chu = convertNumberToWords(this.chuyen_nhuong_dat.gt);
@@ -316,7 +342,7 @@ export default {
                     }
                 }
             }
-            if (this.selectedForm == 3) {
+            else if (this.selectedForm.id == 3) {
                 this.mua_ban_oto.ten_ccv = this.notarizedDocument.notary.name;
                 this.mua_ban_oto.ngay_thang = formatDate(this.notarizedDocument.date);
                 this.mua_ban_oto.gt_chu = convertNumberToWords(this.mua_ban_oto.gt);
@@ -342,20 +368,55 @@ export default {
                     this.mua_ban_oto.dia_chi_b1 = this.notarizedDocument.customersB[0].address;
                 }
             }
+            else{
+                this.info.ten_ccv = this.notarizedDocument.notary.name;
+                this.info.ngay_thang = formatDate(this.notarizedDocument.date);
+                this.info.ten_file = this.selectedForm.file;
+                if (this.notarizedDocument.customersA.length > 0) {
+                    this.info.ten_a1 = this.notarizedDocument.customersA[0].name;
+                    this.info.nam_sinh_a1 = formatDate(this.notarizedDocument.customersA[0].date_of_birth);
+                    this.info.cccd_a1 = this.notarizedDocument.customersA[0].idCard_number;
+                    this.info.ngay_cccd_a1 = formatDate(this.notarizedDocument.customersA[0].idCard_issued_date);
+                    this.info.dia_chi_a1 = this.notarizedDocument.customersA[0].address;
+                    if (this.notarizedDocument.customersA.length > 1) {
+                        this.info.ten_a2 = this.notarizedDocument.customersA[1].name;
+                        this.info.nam_sinh_a2 = formatDate(this.notarizedDocument.customersA[1].date_of_birth);
+                        this.info.cccd_a2 = this.notarizedDocument.customersA[1].idCard_number;
+                        this.info.ngay_cccd_a2 = formatDate(this.notarizedDocument.customersA[1].idCard_issued_date);
+                        this.info.dia_chi_a2 = this.notarizedDocument.customersA[1].address;
+                    }
+                }
+                if (this.notarizedDocument.customersB.length > 0) {
+                    this.info.ten_b1 = this.notarizedDocument.customersB[0].name;
+                    this.info.nam_sinh_b1 = formatDate(this.notarizedDocument.customersB[0].date_of_birth);
+                    this.info.cccd_b1 = this.notarizedDocument.customersB[0].idCard_number;
+                    this.info.ngay_cccd_b1 = formatDate(this.notarizedDocument.customersB[0].idCard_issued_date);
+                    this.info.dia_chi_b1 = this.notarizedDocument.customersB[0].address;
+                    if (this.notarizedDocument.customersB.length > 1) {
+                        this.info.ten_b2 = this.notarizedDocument.customersB[1].name;
+                        this.info.nam_sinh_b2 = formatDate(this.notarizedDocument.customersB[1].date_of_birth);
+                        this.info.cccd_b2 = this.notarizedDocument.customersB[1].idCard_number;
+                        this.info.ngay_cccd_b2 = formatDate(this.notarizedDocument.customersB[1].idCard_issued_date);
+                        this.info.dia_chi_b2 = this.notarizedDocument.customersB[1].address;
+                    }
+                }
+            }
         },
         taohoso() {
             this.createContent()
-            if (this.selectedForm == 1) {
+            if (this.selectedForm.id == 1) {
                 this.data = this.uy_quyen;
             }
-            if (this.selectedForm == 2) {
+            else if (this.selectedForm.id == 2) {
                 this.data = this.chuyen_nhuong_dat;
             }
-            if (this.selectedForm == 3) {
+            else if (this.selectedForm.id == 3) {
                 this.data = this.mua_ban_oto;
+            } else{
+                this.data = this.info;
             }
             this.showLoading = true;
-            axios.post(`generateDocument/${this.selectedForm}`, this.data).then(res => {
+            axios.post(`generateDocument/${this.selectedForm.id}`, this.data).then(res => {
                 if (res.data.success) {
                     this.showLoading = false;
                     this.$emit('send-link', res.data.google_drive_link);
@@ -366,7 +427,7 @@ export default {
         },
         close() {
             this.$emit('close');
-        }
+        },
     }
 }
 </script>

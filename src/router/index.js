@@ -14,9 +14,14 @@ const routes = [
         component: () => import('../views/User/Home.vue'),
       },
       {
-        path: '/procedure', 
-        name: "Procedure",
-        component: () => import('../views/User/Procedure.vue'),
+        path: '/service', 
+        name: "Service",
+        component: () => import('../views/User/Service.vue'),
+      },
+      {
+        path: '/introduce', 
+        name: "Introduce",
+        component: () => import('../views/User/Introduce.vue'),
       },
       {
         path: '/lawTexts', 
@@ -27,6 +32,16 @@ const routes = [
         path: '/booking', 
         name: "Booking",
         component: () => import('../views/User/Booking.vue'),
+      },
+      {
+        path: '/contact', 
+        name: "Contact",
+        component: () => import('../views/User/Contact.vue'),
+      },
+      {
+        path: '/documents', 
+        name: "Documents",
+        component: () => import('../views/User/Documents.vue'),
       },
 
     ],

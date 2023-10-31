@@ -51,23 +51,24 @@
                         <li class="item" :class="{ active: $route.path === '/' }">
                             <RouterLink to="/" class="text-dark">Trang chủ</RouterLink>
                         </li>
-                        <li class="item">
-                            <RouterLink to="" class="text-dark">Giới thiệu</RouterLink>
+                        <li class="item" :class="{ active: $route.path === '/introduce' }">
+                            <RouterLink to="/introduce" class="text-dark">Giới thiệu</RouterLink>
                         </li>
-                        <li class="item">
-                            <RouterLink to="/procedure" class="text-dark">Thủ tục</RouterLink>
+                        <li class="item" :class="{ active: $route.path === '/service' }">
+                            <RouterLink to="/service" class="text-dark">Dịch vụ</RouterLink>
                         </li>
-                        <li class="item">
-                            <RouterLink to="" class="text-dark">Biểu phí</RouterLink>
-                        </li>
+          
                         <li class="item" :class="{ active: $route.path === '/lawTexts' }">
                             <RouterLink to="/lawTexts" class="text-dark">Văn bản pháp luật</RouterLink>
                         </li>
                         <li class="item" :class="{ active: $route.path === '/booking' }">
                             <RouterLink to="/booking" class="text-dark">Đặt lịch</RouterLink>
                         </li>
-                        <li class="item">
-                            <RouterLink to="" class="text-dark">Liên hệ</RouterLink>
+                        <li class="item" :class="{ active: $route.path === '/contact' }">
+                            <RouterLink to="/contact" class="text-dark">Liên hệ</RouterLink>
+                        </li>
+                        <li v-if="customer" class="item" :class="{ active: $route.path === '/documents' }">
+                            <RouterLink to="/documents" class="text-dark">Hồ sơ</RouterLink>
                         </li>
                     </ul>
                     <hr class="m-0">

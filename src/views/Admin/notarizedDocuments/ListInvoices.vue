@@ -16,7 +16,7 @@
             <tbody>
                 <tr v-for="(invoice, index) in invoices" :key="index">
                     <td>{{ invoice.id }}</td>
-                    <td>{{ invoice.user_id }}</td>
+                    <td>{{ invoice.user.name }}</td>
                     <td>{{ invoice.content }}</td>
                     <td>{{ formatPrice(invoice.cost) }}</td>
                     <td>{{ invoice.payment_method }}</td>

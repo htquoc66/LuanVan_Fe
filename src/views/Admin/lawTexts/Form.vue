@@ -1,11 +1,18 @@
 <template>
     <div class="modal-container" v-show="showModal">
         <div class="modal-overlay" @click="closeModal"></div>
-        <div class="modal-content" style="width: 60vw;">
+        <div class="modal-content" style="width: 65vw;">
             <span class="modal-close" @click="closeModal"><i class="fa-solid fa-circle-xmark"></i></span>
             <h4 class="text-center my-4 text-blue">Văn bản pháp luật</h4>
             {{ lawTextIdToEdit }}
             <form @submit.prevent="save()">
+                <div class="form-groups mb-3">
+                    <label class="form-label">Danh mục:</label>
+                    <select v-model="lawText.category_id" class="form-select">
+                        <option v-for="(category, index) in categories" :key="index" :value="category.id">
+                            {{ category.name }}</option>
+                    </select>
+                </div>
                 <div class="form-group mb-3">
                     <label for="" class="form-label">Tên:</label>
                     <input v-model="lawText.name" type="text" class="form-control">
@@ -61,8 +68,10 @@ export default {
                 name: '',
                 file: '',
                 effective_date: '',
-                status: 'Đang áp dụng'
-            }
+                status: 'Đang áp dụng',
+                category_id:''
+            },
+            categories:[]
         }
     },
     props: {
@@ -79,12 +88,20 @@ export default {
             required: null,
         }
     },
+    created() {
+        this.getCategories();
+    },
     watch: {
         lawTextIdToEdit(newId, oldId) {
             this.getLawText(newId);
         }
     },
     methods: {
+        getCategories() {
+            axios.get('categories').then(res => {
+                this.categories = res.data;
+            })
+        },
         async getLawText(lawTextId) {
             if (lawTextId != null) {
                 await axios.get(`lawTexts/${lawTextId}`).then(res => {

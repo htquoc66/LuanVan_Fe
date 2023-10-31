@@ -291,13 +291,16 @@
                             <label for="" class="h6">Chọn biểu mẫu</label>
                             <select class="form-select" v-model="selectedForm">
                                 <option value="">--Chọn biểu mẫu--</option>
-                                <option v-for="(form, index) in filteredForms" :value="form.id">
+                                <option v-for="(form, index) in filteredForms" :value="form">
                                     {{ form.name }}
                                 </option>
                             </select>
                         </div>
                         <div class="mb-3" v-show="!linkFromChild">
-                            <button @click="showAddContent()" class="btn btn-dark">+ Nội dung</button>
+                            <button v-if="selectedForm != null && (selectedForm.id == 1 || selectedForm.id == 2 || selectedForm.id == 3)"
+                             @click="showAddContent()" class="btn btn-dark">+ Nội dung</button>
+                            <button v-else  class="btn btn-successn" @click="callFunctionInAddContent">Tạo hồ sơ</button>
+
                         </div>
 
                         <div class="">
@@ -407,7 +410,7 @@
             </ul>
         </div>
     </div>
-    <AddContent :showModalAddContent="showModalAddContent" @close="showModalAddContent = false" :selectedForm="selectedForm"
+    <AddContent ref="addContentRef" :showModalAddContent="showModalAddContent" @close="showModalAddContent = false" :selectedForm="selectedForm"
         :notarizedDocument="notarized_document" @send-link="linkFromChild = $event" />
 </template>
 
@@ -430,7 +433,7 @@ export default {
             showModal: false, //formStaff
             accountants: [],
             categories: [],
-            selectedForm: '',
+            selectedForm: null,
             forms: [],
             filteredForms: [],
             customers: [],
@@ -516,6 +519,9 @@ export default {
     },
     methods: {
         formatPrice, hasPermission,
+        callFunctionInAddContent() {
+            this.$refs.addContentRef.taohoso();
+        },
         showAddContent() {
             if (this.selectedForm == '') {
                 alert("Chọn biểu mẫu")
@@ -523,8 +529,7 @@ export default {
                 this.showModalAddContent = true;
             }
         },
-        filterForms() {
-            
+        filterForms() {            
             const selectedCategoryId = this.notarized_document.category_id;
             if (selectedCategoryId) {
                 // Nếu đã chọn loại hồ sơ, lọc danh sách để hiển thị

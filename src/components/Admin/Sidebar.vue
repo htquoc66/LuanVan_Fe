@@ -12,7 +12,7 @@
                     <span class="text">Dashboard</span>
                 </RouterLink>
             </li>
-            <li :class="{ active:  $route.path.includes('/admin/appointments')}">
+            <li v-if="hasPermission(3)" :class="{ active:  $route.path.includes('/admin/appointments')}">
                 <RouterLink to="/admin/appointments/listAppointments">
                     <i class='bx bxs-calendar'></i>
                     <span class="text">Quản lý lịch hẹn</span>
@@ -57,7 +57,7 @@
                 </RouterLink>
             </li>
 
-            <li :class="{ active: $route.path.includes('/admin/staffs') }">
+            <li v-if="hasPermission(1)" :class="{ active: $route.path.includes('/admin/staffs') }">
                 <RouterLink to="/admin/staffs/listStaffs">
                     <i class='bx bxs-briefcase'></i>
                     <span class="text">Quản lý nhân viên</span>

@@ -234,18 +234,18 @@ import axios from 'axios';
 import { formatPrice, formatDate, convertNumberToWords } from '@/utils';
 export default {
   data() {
-    return {     
+    return {
       admin: [],
       selectedCustomer: '',
       invoices: {
         customer_id: '',
         user_id: '', // nhân viên
         content: '',
-        date:'',
-        cost:'',
-        payment_method:'Tiền mặt',
-        file_pdf:'',
-        notarizedDocument_id:[],
+        date: '',
+        cost: '',
+        payment_method: 'Tiền mặt',
+        file_pdf: '',
+        notarizedDocument_id: [],
       },
       fileName: ''
 
@@ -300,8 +300,8 @@ export default {
           html2canvas(element1, html2canvasConfig),
           html2canvas(element2, html2canvasConfig),
         ]).then(([canvas1, canvas2]) => {
-          const imgData1 = canvas1.toDataURL('image/jpeg', 0.98);
-          const imgData2 = canvas2.toDataURL('image/jpeg', 0.98);
+          const imgData1 = canvas1.toDataURL('image/jpeg', 0.9);
+          const imgData2 = canvas2.toDataURL('image/jpeg', 0.9);
 
           pdf.addImage(imgData1, 'JPEG', 0, 0, pageWidth, pageHeight);
           pdf.addPage();
@@ -319,15 +319,15 @@ export default {
           formData.append('payment_method', this.invoices.payment_method);
           formData.append('notarizedDocument_id', JSON.stringify(this.invoices.notarizedDocument_id));
 
-          console.log(formData)
+          console.log(formData.file_pdf)
           axios.post('/invoices', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            })
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
             .then(response => {
               console.log(response.data);
-              if(response.data.success){
+              if (response.data.success) {
                 this.$router.push('/admin/notarizedDocuments/listInvoices')
 
               }
@@ -336,22 +336,20 @@ export default {
               console.error(error);
             });
         });
-        // window.open('http://127.0.0.1:8000/storage/forms/your-file-name.pdf', '_blank');
-
       }
     },
     // tạo nội dung phiếu thu và tên file pdf
-    createContent(){
-      this.fileName ="PhieuThu-HoSo";
+    createContent() {
+      this.fileName = "PhieuThu-HoSo";
       this.selectedNotarizedDocuments.reverse();
       this.selectedNotarizedDocuments.forEach(document => {
-          this.fileName +='-'+document.id;
-          // gán id hồ sơ vào mảng
-          this.invoices.notarizedDocument_id.push(document.id);
-          // nội dung phiếu thu
-          this.invoices.content += document.name + '; ';
+        this.fileName += '-' + document.id;
+        // gán id hồ sơ vào mảng
+        this.invoices.notarizedDocument_id.push(document.id);
+        // nội dung phiếu thu
+        this.invoices.content += document.name + '; ';
       });
-      this.fileName = this.fileName+'.pdf'
+      this.fileName = this.fileName + '.pdf'
     },
 
     // Tổng phí công chứng
@@ -383,14 +381,14 @@ export default {
       });
       this.invoices.cost = totalCost;
     },
-   
+
     addSelectedCustomer(customer) {
       // Thêm khách hàng đã chọn vào mảng selectedCustomer
       this.selectedCustomer = customer
       this.invoices.customer_id = this.selectedCustomer.id;
     },
 
-    
+
   },
   computed: {
     ...mapGetters(['selectedNotarizedDocuments']),
@@ -442,9 +440,5 @@ export default {
   color: #fff;
 }
 
-/* .wrap::-webkit-scrollbar{
-  width: 14px;
-  height: 14px;
-} */
 </style>
   

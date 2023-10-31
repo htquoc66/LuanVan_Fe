@@ -5,6 +5,7 @@
             <span class="modal-close" @click="closeModal"><i class="fa-solid fa-circle-xmark"></i></span>
             <h4 class="text-center my-4 text-blue">Thông tin biểu mẫu</h4>
             <form @submit.prevent="save()">
+  
                 <div class="form-groups mb-3">
                     <label class="form-label">Danh mục:</label>
                     <select v-model="form.category_id" class="form-select">
@@ -23,6 +24,11 @@
                 <div class="form-groups mb-3">
                     <label class="form-label">File docx:</label>
                     <input  ref="fileInput" type="file" @change="onFileChange" class="form-control">
+                </div>
+                <div>
+                    <a target="_blank" href="https://docs.google.com/document/d/1WOHXV_wkz3bY_fFsXJPdSalxzId573-H/edit">
+                        Xem mẫu hồ sơ
+                    </a>
                 </div>
 
                 <div class="d-flex justify-content-between mt-5">

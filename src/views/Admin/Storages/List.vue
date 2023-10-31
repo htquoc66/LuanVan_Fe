@@ -50,7 +50,7 @@
                 <input :value="storage.notarized_document.name" disabled type="text" class="form-control">
             </div>
             <div class="form-groups mb-3" v-if="storage">
-                <h6>Tên hồ sơ:</h6>
+                <h6>Ngày tạo hồ sơ:</h6>
                 <input :value="formatDate(storage.notarized_document.date)" disabled type="text" class="form-control">
             </div>
             <div class="form-groups mb-3" v-if="storage">

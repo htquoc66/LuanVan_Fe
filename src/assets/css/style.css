@@ -9,7 +9,7 @@
 }
 
 .text-blue {
-    color: #3872b2 !important;
+    color: #3279c6 !important;
 }
 
 .text-right {
@@ -39,7 +39,7 @@ a {
 }
 
 a.page-link {
-    color: #3872b2 !important;
+    color: #3279c6 !important;
 }
 
 .page-item.active .page-link {
@@ -52,11 +52,11 @@ a.page-link {
 }
 
 .page-item.active .page-link {
-    background: #3872b2 !important;
+    background: #3279c6 !important;
 }
 
 .table thead {
-    background-color: #3872b2;
+    background-color: #3279c6;
 }
 
 .table thead tr th {
@@ -75,7 +75,7 @@ button:hover {
 }
 
 .btn-blue {
-    background-color: #3872b2 !important;
+    background-color: #3279c6 !important;
     font-weight: 500 !important;
     color: #fff !important;
     border: none;
@@ -85,11 +85,11 @@ button:hover {
     background-color: #fff;
     color: #000;
     font-weight: 500 !important;
-    border: 1px solid #3872b2;
+    border: 1px solid #3279c6;
 }
 
 .btn-icon {
-    color: #3872b2;
+    color: #3279c6;
     border: 1px solid #aaa;
     border-radius: 20px;
     padding: 4px 18px;
@@ -223,4 +223,9 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.1);
     z-index: 1070 !important;
 
+}
+
+.card{
+	border: none;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;	background-color: white;
 }

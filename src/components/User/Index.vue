@@ -19,7 +19,7 @@ export default {
 
 <style  scoped>
 main{
-    min-height: 800px;
+    min-height: 500px;
 }
 @import "@/assets/css/style.css";
 @import "@/assets/css/user.css";

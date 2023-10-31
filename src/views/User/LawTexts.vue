@@ -1,30 +1,49 @@
 <template>
-    <div class="container">
-        <h3 class="text-center text-blue py-3">Các văn bản pháp luật liên quan</h3>
-        <div>
-            <h6>Luật Công chứng và các văn bản hướng dẫn, quy định chi tiết thi hành luật công chứng</h6>
-            <ul>
-                <li>
-                    <a href="">Văn bản 1</a>
-                </li>
-                <li>
-                    <a href="">Văn bản 2</a>
-                </li>
-                <li>
-                    <a href="">Văn bản 3</a>
-                </li>
-            </ul>
+    <div class="container pt-3 pb-5">
+        <div class="row">
+            <div class="col-8">
+                <div class="card h-100">
+                    <div class="text-blue px-3 pt-3">
+                        <h5>CÁC VĂN BẢN PHÁP LUẬT LIÊN QUAN</h5>
+                   </div>                    
+                   <div class="px-5">
+                        <a href="" class="">
+                            <h6>=> Luật dân sự 2013</h6>
+                        </a>
+                   </div>
+
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card px-2">
+                   <div class="text-center text-blue py-3">
+                        <h5>LIÊN KẾT TRANG</h5>
+                   </div>
+                   <a target="_blank" class="text-dark  mb-3 d-block" href="https://www.moj.gov.vn/Pages/home.aspx">
+                        <img src="@/assets/home/img5.jpg" style="width: 100%;" alt="">
+                   </a>
+                   <a target="_blank" class="text-dark mb-3 d-block" href="http://cantho.gov.vn/wps/portal/sotp/">
+                        <img src="@/assets/home/img6.jpg" style="width: 100%;" alt="">
+                   </a>
+                   <a target="_blank" class="text-dark mb-3 d-block" href="https://www.cantho.gov.vn/wps/portal/home">
+                        <img src="@/assets/home/img7.jpg" style="width: 100%;" alt="">
+                   </a>
+                   <a target="_blank" class="text-dark mb-3 d-block" href="https://cna.org.vn/">
+                        <img src="@/assets/home/img8.jpg" style="width: 100%;" alt="">
+                   </a>
+                   <a target="_blank" class="text-dark mb-3 d-block" href="http://cantho.gov.vn/wps/portal/sotnmt/">
+                        <img src="@/assets/home/img9.jpg" style="width: 100%;" alt="">
+                   </a>
+                   <a target="_blank" class="text-dark mb-3 d-block" href="http://cantho.gov.vn/wps/portal/sokhdt/">
+                        <img src="@/assets/home/img10.jpg" style="width: 100%;" alt="">
+                   </a>
+
+                </div>
+            </div>
         </div>
-       
     </div>
 </template>
 
-<script>
-    export default {
-        
-    }
-</script>
 
-<style scoped>
 
-</style>
