@@ -1,10 +1,10 @@
 <template>
-     <div class="container pt-3 pb-5">
+     <div class="container-lg pt-4 pb-5">
           <div class="row">
-               <div class="col-8">
+               <div class="col-md-8">
                     <div class="card h-100">
-                         <div class="text-blue px-3 pt-3">
-                              <h5>GIỚI THIỆU</h5>
+                         <div class="heading">
+                              giới thiệu
                          </div>
                          <div class="px-3">
                               <p>
@@ -58,10 +58,10 @@
                     </div>
                </div>
 
-               <div class="col-4 ">
+               <div class="col-md-4 side">
                     <div class="card px-2 h-100">
-                         <div class="text-center text-blue py-3">
-                              <h5>LIÊN KẾT TRANG</h5>
+                         <div class="heading">
+                              LIÊN KẾT TRANG
                          </div>
                          <a target="_blank" class="text-dark  mb-3 d-block" href="https://www.moj.gov.vn/Pages/home.aspx">
                               <img src="@/assets/home/img5.jpg" style="width: 100%;" alt="">

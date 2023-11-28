@@ -1,13 +1,13 @@
 <template>
     <footer>
-        <div class="container py-5">
+        <div class="container-xl py-5">
             <div class="row ">
-                <div class="col-5">
+                <div class="col-md-5">
                     <div class="d-flex align-items-center">
                         <img src="@/assets/logo.png" width="75" alt="">
-                        <h5 class="text-blue m-0">
+                        <h6 class="text-blue m-0">
                             CÔNG CHỨNG CẦN THƠ
-                        </h5>
+                        </h6>
                     </div>
                     <div class="mt-1">
                         <ul>
@@ -26,7 +26,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="footer-working-hours col-md-4">
                     <h5 class="text-blue mt-4">Thời gian làm việc:</h5>
                     <div class="mt-4">
                         _ Thứ 2 đến thứ 7:
@@ -34,7 +34,7 @@
                         <li class="mx-4">Chiều: từ 13h00 đến 17h00</li>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-md-3 social-network">
                     <h5 class="text-blue mt-4">Mạng xã hội:</h5>
                     <div class="mt-4">
                         <a href="" class="me-4 text-reset">

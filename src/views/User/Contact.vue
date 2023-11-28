@@ -1,7 +1,7 @@
 <template>
-     <div class="container pt-3 pb-5">
+     <div class="container-lg pt-3 pb-5">
           <div class="row">
-               <div class="col-8">
+               <div class="col-md-8">
                     <div class="card h-100 px-3">
                          <div>
                               <div class="text-center">
@@ -24,7 +24,7 @@
                     </div>
                </div>
 
-               <div class="col-4">
+               <div class="col-md-4 side">
                     <div class="card px-2 h-100">
                          <div>
                               <!-- <div class="text-center">
@@ -45,14 +45,14 @@
 
                               <div v-for="i in 5" :key="i">
                                    <div class="d-flex mt-1">
-                                        <div class="d-flex align-items-center" style="width: 10%;">
+                                        <div class="d-flex align-items-center" style="width: 15%;">
                                              <h6 class="my-auto">{{ 6 - i }}</h6><i class="fas fa-star fa-xs px-1"></i>
                                         </div>
                                         <div class="col-full">
                                              <div class="bg-warning h-100" :style="{ width: ratingPercentage(6 - i) + '%' }">
                                              </div>
                                         </div>
-                                        <div class="" style="width: 10%;">{{ ratingPercentage(6 - i) }}%</div>
+                                        <div class="" style="width: 15%;">{{ ratingPercentage(6 - i) }}%</div>
                                    </div>
                               </div>
 
@@ -284,7 +284,7 @@ export default {
 }
 
 .col-full {
-     width: 80% !important;
+     width: 70% !important;
      height: 8px;
      margin: auto 0;
      margin-right: 6px;

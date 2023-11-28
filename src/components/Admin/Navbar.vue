@@ -3,8 +3,8 @@
     <nav>
         <div>
             <i id="menuIcon" class='bx bx-menu'></i>
-            <span v-if="admin">
-                {{ admin.id }}:{{ admin.name }}_
+            <span v-if="admin" class="px-3">
+                {{ admin.name }}
             </span>
         </div>
 

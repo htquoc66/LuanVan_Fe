@@ -1,17 +1,18 @@
 <template>
-    <section>
+    <section class="banner">
         <img src="@/assets/banner.png" style="width: 100%;" alt="">
     </section>
-    <div class="container py-5">
-
-
+    <section class="banner-mobile">
+        <img src="@/assets/banner-mobile.png" style="width: 100%;" alt="">
+    </section>
+    <div class="container-sm py-5">
         <section class="pb-5">
-            <div class="heading text-center">
-                <h3 class=" text-blue mb-3">DỊCH VỤ CỦA CHÚNG TÔI</h3>
-                <hr>
+            <div class="heading">
+                DỊCH VỤ CỦA CHÚNG TÔI
+                <hr class="mt-2">
             </div>
             <div class="row mt-5">
-                <div class="col-4">
+                <div class="col-xl-4 col-md-6">
                     <div class="box d-flex">
                         <div class="box-icon">
                             <i class="text-blue fa-4x fa-solid fa-book-open"></i>
@@ -27,7 +28,7 @@
                     </div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-xl-4 col-md-6">
                     <div class="box d-flex">
                         <div class="box-icon">
                             <i class="text-blue fa-4x fa-solid fa-hand-holding-heart"></i>
@@ -41,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-xl-4 col-md-6">
                     <div class="box d-flex">
                         <div class="box-icon">
                             <i class="text-blue fa-4x fa-regular fa-clock"></i>
@@ -55,10 +56,10 @@
                 </div>
 
 
-            </div>
 
-            <div class="row mt-5">
-                <div class="col-4">
+
+
+                <div class="col-xl-4 col-md-6">
                     <div class="box d-flex">
                         <div class="box-icon">
                             <i class="text-blue fa-4x fa-solid fa-handshake"></i>
@@ -71,7 +72,7 @@
                     </div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-xl-4 col-md-6">
                     <div class="box d-flex">
                         <div class="box-icon">
                             <i class="text-blue fa-4x fa-solid fa-car"></i>
@@ -85,7 +86,7 @@
                     </div>
                 </div>
 
-                <div class="col-4">
+                <div class="col-xl-4 col-md-6">
                     <div class="box d-flex">
                         <div class="box-icon">
                             <i class="text-blue fa-4x fa-solid fa-circle-dollar-to-slot"></i>
@@ -124,4 +125,5 @@ export default {
 
 .box:hover .box-icon {
     transform: rotateY(180deg);
-}</style>
+}
+</style>

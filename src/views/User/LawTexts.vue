@@ -1,7 +1,7 @@
 <template>
-    <div class="container pt-3 pb-5">
+    <div class="container-lg pt-3 pb-5">
         <div class="row">
-            <div class="col-8">
+            <div class="col-md-8">
                 <div class="card h-100">
                     <div class="text-blue px-3 pt-3">
                         <h5>CÁC VĂN BẢN PHÁP LUẬT LIÊN QUAN</h5>
@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-md-4 side">
                 <div class="card px-2">
                    <div class="text-center text-blue py-3">
                         <h5>LIÊN KẾT TRANG</h5>

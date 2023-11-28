@@ -1,7 +1,7 @@
 <template>
-    <div class="container pt-3 pb-5">
+    <div class="container-lg pt-3 pb-5">
         <div class="row pt-3">
-            <div class="col-8 ">
+            <div class="col-lg-8 ">
                 <div class="card p-2">
                     <div class="row  p-2">
                         <div class="col-4">
@@ -75,7 +75,7 @@
                 </div>
             </div>
 
-            <div class="col-4 ">
+            <div class="col-lg-4 side">
                 <div class="card px-2 h-100">
                    <div class="text-center text-blue py-3">
                         <h4>LIÊN KẾT TRANG</h4>

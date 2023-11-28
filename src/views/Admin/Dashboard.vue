@@ -2,16 +2,18 @@
     <div>
         <div class="row mb-3">
             <div class="col-4">
-                <div class="card py-3 ">
-                    <div class="d-flex">
-                        <div class="mx-3 mb-0 alert alert-primary">
-                            <i class="fa-3x text-primary  fa-regular fa-calendar-days"></i>
+                <div class="card py-3">
+                    <RouterLink to="/admin/appointments/listAppointments" class="text-dark">
+                        <div class="d-flex">
+                            <div class="mx-3 mb-0 alert alert-primary">
+                                <i class="fa-3x text-primary  fa-regular fa-calendar-days"></i>
+                            </div>
+                            <div>
+                                <h3>{{ appointments.length }}</h3>
+                                <p>Lịch hẹn mới</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3>0</h3>
-                            <p>Lịch hẹn hôm nay</p>
-                        </div>
-                    </div>
+                    </RouterLink>
                 </div>
             </div>
             <div class="col-4">
@@ -104,6 +106,8 @@ export default {
             chartPie: null,
             chartLine: null,
             chartBar: null,
+            appointments: [],
+
         };
     },
     mounted() {
@@ -111,57 +115,14 @@ export default {
         this.createChartLine();
         this.createChartPie();
         this.createChartBar(); // Thêm dòng này để tạo biểu đồ Bar khi component được mounted
-
+        this.getAppointments();
     },
     methods: {
-        // exportToExcel() {
-        //     try {
-        //         const workbook = new ExcelJS.Workbook();
-        //         const worksheet = workbook.addWorksheet('Biểu đồ dữ liệu');
-        //         worksheet.addRow(['Thống kê từ ngày', this.minDate1, 'đến', this.maxDate1]);
-        //         worksheet.addRow([]);
-
-        //         // Định nghĩa các dòng dữ liệu trong tệp Excel
-        //         worksheet.addRow(['Doanh thu theo ngày']);
-        //         worksheet.addRow(['Ngày', 'Doanh thu']);
-        //         this.dataCharLine.forEach(item => {
-        //             worksheet.addRow([item.date, item.total_revenue]);
-        //         });
-        //         worksheet.addRow([]);
-
-        //         worksheet.addRow(['Doanh thu theo từng loại']);
-        //         worksheet.addRow(['Loại', 'Doanh thu']);
-        //         this.dataCharBar.forEach(item => {
-        //             worksheet.addRow([item.category_name, item.total_revenue]);
-        //         });
-        //         worksheet.addRow([]);
-
-        //         worksheet.addRow(['Số lượng hồ sơ theo loại']);
-        //         worksheet.addRow(['Loại', 'Số lượng hồ sơ']);
-        //         this.dataCharPie.forEach(item => {
-        //             worksheet.addRow([item.category_name, item.document_count]);
-        //         });
-
-        //         // Tạo một Blob từ tệp Excel
-        //         workbook.xlsx.writeBuffer().then(data => {
-        //             const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-        //             // Tạo một URL cho Blob
-        //             const url = window.URL.createObjectURL(blob);
-
-        //             // Tạo một liên kết để tải tệp Excel
-        //             const a = document.createElement('a');
-        //             a.href = url;
-        //             a.download = 'du_lieu_bieu_do.xlsx';
-        //             a.click();
-
-        //             // Dọn dẹp
-        //             window.URL.revokeObjectURL(url);
-        //         });
-        //     } catch (error) {
-        //         console.error(error);
-        //     }
-        // },
+        async getAppointments() {
+            await axios.get('appointments').then(res => {
+                this.appointments = res.data.filter(appointment => appointment.status == 1);
+            });
+        },
         exportToExcel() {
             try {
                 const workbook = new ExcelJS.Workbook();

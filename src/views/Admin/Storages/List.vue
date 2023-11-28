@@ -10,7 +10,8 @@
                     <th>Tên hồ sơ</th>
                     <th>Ngày lập</th>
                     <th>File lưu trữ</th>
-                    <th>Tùy chọn</th>
+                    <th>Mật khẩu nén</th>
+                    <th >Tùy chọn</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +28,18 @@
                         </a>
                     </td>
                     <td>
-                        <button class="btn-icon">
+                        <div v-if="showPass" @click="showPass = false" class="d-flex justify-content-between px-3">
+                            <div>{{ storage.zip_password }}</div>
+                            <div><i class="fa-solid fa-eye"></i></div>
+                           
+                        </div>
+                        <div v-else @click="showPass = true"  class="d-flex justify-content-between px-3">
+                            <div>********</div>
+                            <div><i class="fa-solid fa-eye-slash"></i></div>
+                        </div>
+                    </td>
+                    <td >
+                        <button v-if="storage.file != null" class="btn-icon">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </td>
@@ -41,6 +53,7 @@
         <div class="modal-content" style="width: 60vw;">
             <span class="modal-close" @click="showModal = false"><i class="fa-solid fa-circle-xmark"></i></span>
             <h5 class="text-center text-blue">Thêm file lưu trữ</h5>
+            {{ data }}
             <div class="form-groups mb-3" v-if="storage">
                 <h6>Số hồ sơ:</h6>
                 <input :value="storage.notarized_document.id" disabled type="text" class="form-control">
@@ -56,6 +69,10 @@
             <div class="form-groups mb-3" v-if="storage">
                 <h6>Thêm file:</h6>
                 <input @change="onFileChange" type="file" class="form-control">
+            </div>
+            <div class="form-groups mb-3" v-if="storage">
+                <h6>Mật khẩu nén:</h6>
+                <input v-model="data.zip_password"  type="password" class="form-control">
             </div>
             <div class="text-center mt-3">
                 <button @click="save()" class="btn-blue">Lưu thay đổi</button>
@@ -81,8 +98,12 @@ export default {
             storages: [],
             storage: null,
             showModal: false,
-            file: '',
-            showLoading: false
+            data:{
+                file: '',
+                zip_password:''
+            },
+            showLoading: false,
+            showPass: false,
         }
     },
     created() {
@@ -101,11 +122,11 @@ export default {
             this.showModal = true;
         },
         onFileChange(event) {
-            this.file = event.target.files[0];
+            this.data.file = event.target.files[0];
         },
         save() {
             this.showLoading = true;
-            axios.post(`storages/${this.storage.id}`, { file: this.file }, {
+            axios.post(`storages/${this.storage.id}`, this.data, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

@@ -10,40 +10,44 @@
           <i class="fa-solid fa-plus"></i> Thêm mới
         </button>
         &nbsp;
-        <button class="btn-blue px-4 mt-2 mb-3" @click="exportToExcel">
+        <button v-if="hasPermission(1)" class="btn-blue px-4 mt-2 mb-3" @click="exportToExcel">
           <i class="fa-solid fa-file-excel"></i> Xuất Excel
         </button>
-
       </div>
 
-      <table class="myTable table table-striped  table-bordered ">
+      <table class="myTable table table-striped">
         <thead class="">
           <tr>
             <th>Loại KH</th>
-            <th style="width: 15% !important;">Họ tên</th>
-            <th>Số CCCD</th>
-            <th>Ngày cấp</th>
-            <th>Nơi cấp</th>
-            <th>Giới tính</th>
+            <th >Họ tên</th>
             <th>Ngày sinh</th>
-            <th>Sđt</th>
+            <th style="width: 20% !important;">Giới tính</th>
             <th>Email</th>
-            <th style="width: 20% !important;">Địa chỉ</th>
+            <th>Sđt</th>
             <th>Tùy chọn</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(customer, index) in customers" :key="index">
-            <td>{{ customer.type }}</td>
-            <td>{{ customer.name }}</td>
-            <td>{{ customer.idCard_number }}</td>
-            <td>{{ formatDate(customer.idCard_issued_date) }}</td>
-            <td>{{ customer.idCard_issued_place }}</td>
-            <td>{{ customer.gender }}</td>
-            <td>{{ formatDate(customer.date_of_birth) }}</td>
+          <tr v-for="(customer, index) in customers" :key="index" @click="toggleDetails(index)" >
+            <td>{{ customer.type }}
+              <p v-if=" customer.expanded" class="mt-2 mb-0"><strong>Số CCCD:</strong> {{ customer.idCard_number }}</p>             
+            
+            </td>
+            <td>{{ customer.name }}         
+              <p v-if=" customer.expanded" class="mt-2 mb-0"><strong>Ngày cấp:</strong> {{ customer.idCard_issued_date }}</p>
+
+            </td>
+            <td>{{ formatDate(customer.date_of_birth) }}
+              <p v-if=" customer.expanded" class="mt-2 mb-0"><strong>Nơi cấp:</strong> {{ customer.idCard_issued_place }}</p>
+
+            </td>
+            <td>{{ customer.gender }}
+              <p v-if=" customer.expanded" class="mt-2 mb-0"><strong>Địa chỉ:</strong> {{ customer.address }}</p>
+
+            </td>
+            <td>{{ customer.email }}
+            </td>
             <td>{{ customer.phone }}</td>
-            <td>{{ customer.email }}</td>
-            <td>{{ customer.address }}</td>
             <td>
               <button class="btn-icon" @click="deleteCustomer(customer.id)">
                 <i class="fa-solid fa-trash "></i>
@@ -54,6 +58,9 @@
               </button>
             </td>
           </tr>
+         
+
+
         </tbody>
       </table>
     </div>
@@ -64,7 +71,7 @@
 import axios from 'axios';
 import $ from 'jquery';
 import FormCustomer from './Form.vue';
-import { formatDate, initializeDataTable } from '@/utils';
+import { formatDate, hasPermission } from '@/utils';
 import ExcelJS from 'exceljs';
 
 export default {
@@ -83,6 +90,7 @@ export default {
     this.getCustomers();
   },
   methods: {
+    hasPermission,
     async exportToExcel() {
       try {
         const workbook = new ExcelJS.Workbook();
@@ -130,10 +138,40 @@ export default {
       }
     },
 
-
-
     formatDate,
-    initializeDataTable,
+    toggleDetails(index) {
+      console.log('Toggling details for index:', index);
+  this.customers[index].expanded = !this.customers[index].expanded;
+  console.log('Expanded state:', this.customers[index].expanded);
+
+    },
+    initializeDataTable() {
+      if ($.fn.DataTable.isDataTable(".myTable")) {
+        $(".myTable").DataTable().destroy();
+      }
+      this.$nextTick(() => {
+        $(".myTable").DataTable({
+          language: {
+            search: "Tìm kiếm:",
+            searchPlaceholder: "Tìm kiếm",
+            loadingRecords: "Đang tải...",
+            zeroRecords: "Không tìm thấy kết quả",
+            lengthMenu: "Hiển thị _MENU_ dòng",
+            info: "Hiển thị _START_ đến _END_ của _TOTAL_ dòng",
+            infoEmpty: "",
+            paginate: {
+              first: "<<",
+              last: ">>",
+              next: ">",
+              previous: "<",
+            },
+          },
+          order: [],
+          lengthMenu: [5, 10, 25, 50],
+          pageLength: 5,
+        });
+      });
+    },
     editCustomer(id) {
       this.customerIdToEdit = id;
       this.showModal = true;
@@ -141,13 +179,17 @@ export default {
     async getCustomers() {
       try {
         const response = await axios.get('customers');
-        this.customers = response.data;
+        this.customers = response.data.map(customer => ({
+          ...customer,
+          expanded: false, // Initial state for expansion
+        }));
         this.initializeDataTable();
-
       } catch (error) {
         console.log(error);
       }
     },
+
+
     deleteCustomer(id) {
       this.$swal.fire({
         title: 'Bạn có chắc chắn muốn xóa?',
@@ -170,8 +212,15 @@ export default {
       });
     },
   },
-
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.expand-row-btn {
+  cursor: pointer;
+}
+
+.expanded-details {
+  margin-top: 10px;
+}
+</style>

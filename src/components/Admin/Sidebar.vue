@@ -43,14 +43,14 @@
                     <span class="text">Quản lý văn bản pháp luật</span>
                 </RouterLink>
             </li>
-            <li :class="{ active: $route.path === '/admin/forms' }">
+            <li v-if="hasPermission(1)" :class="{ active: $route.path === '/admin/forms' }">
                 <RouterLink to="/admin/forms">
                     <i class='bx bxs-book-content'></i>
                     <span class="text">Quản lý biểu mẫu</span>
                 </RouterLink>
             </li>
 
-            <li :class="{ active: $route.path === '/admin/costs' }">
+            <li v-if="hasPermission(1) || hasPermission(2)" :class="{ active: $route.path === '/admin/costs' }">
                 <RouterLink to="/admin/costs">
                     <i class='bx bxs-dollar-circle'></i>
                      <span class="text">Quản lý chi phí</span>

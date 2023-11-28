@@ -210,16 +210,9 @@ span a:hover {
 
 @media only screen and (max-width: 768px) {
     .side-image {
-        border-radius: 10px 10px 0 0;
+        display: none;
     }
-
-    img {
-        width: 35px;
-        position: absolute;
-        top: 20px;
-        left: 47%;
-    }
-
+    
     .text {
         position: absolute;
         top: 70%;

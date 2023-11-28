@@ -75,29 +75,41 @@ export default {
       this.myAppointments = response.data;
     },
     confirm(appointment) {
-      const isAvailable = this.myAppointments.every(myAppointment => {
-        return (
-          myAppointment.date.date_field !== appointment.date.date_field ||
-          myAppointment.time.time_field !== appointment.time.time_field
-        );
-      });
-      if (isAvailable) {
-        this.appointment.user_id = this.admin.id;
-        axios.put(`appointments/${appointment.id}`, this.appointment).then(res => {
-          if (res.data.success) {
-            this.$swal.fire('Cuộc hẹn đã được xác nhận!', '', 'success');
-            this.getAppointments();
-            this.getAppointmentsByUser();
-          }
+      const currentDate = new Date();
+      const appointmentDate = new Date(appointment.date.date_field);
+
+      // Kiểm tra nếu ngày hẹn lớn hơn ngày hiện tại
+      if (appointmentDate > currentDate) {
+        const isAvailable = this.myAppointments.every(myAppointment => {
+          return (
+            myAppointment.date.date_field !== appointment.date.date_field ||
+            myAppointment.time.time_field !== appointment.time.time_field
+          );
         });
+
+        if (isAvailable) {
+          this.appointment.user_id = this.admin.id;
+          axios.put(`appointments/${appointment.id}`, this.appointment).then(res => {
+            if (res.data.success) {
+              this.$swal.fire('Cuộc hẹn đã được xác nhận!', '', 'success');
+              this.getAppointments();
+              this.getAppointmentsByUser();
+            }
+          });
+        } else {
+          this.$swal.fire({
+            icon: 'error',
+            html: 'Bạn đã có cuộc hẹn khác vào lúc: ' + appointment.time.time_field +
+              '<br>Ngày: ' + this.formatDate(appointment.date.date_field),
+          });
+        }
       } else {
         this.$swal.fire({
           icon: 'error',
-          html: 'Bạn đã có cuộc hẹn khác vào lúc: ' + appointment.time.time_field +
-            '<br>Ngày: ' + this.formatDate(appointment.date.date_field),
+          text: 'Ngày hẹn đã qua. Không thể xác nhận cuộc hẹn.',
         });
       }
-    }
+    },
   }
 }
 </script>

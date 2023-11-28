@@ -1,41 +1,41 @@
 <template>
-  <div class="container">
-    <H4 class="text-center text-blue py-4">ĐẶT LỊCH CÔNG CHỨNG</H4>
-    <div class="calendar">
+  <div class="container-xl">
+    <div class="heading">ĐẶT LỊCH CÔNG CHỨNG</div>
+    <div class="">
       <div class="mb-3">
-        <div>
+        <div class="calendar d-flex">
           <button class="btn-blue" @click="previousWeek">&lt;</button>
           <input type="date" :min="minDate" v-model="selectedDate" @change="dateSelected" class="mx-3 px-3">
           <button class="btn-blue" @click="nextWeek">&gt;</button>
         </div>
       </div>
-      <table class="table table-bordered table-striped text-center">
-        <thead>
-          <tr>
-            <th></th>
-            <th v-for="(item, index) in weekWithDates.slice(1)" :key="index">
-              <div>{{ item.day }}</div>
-              <div>{{ formatDate(item.date) }}</div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="timeSlot in timeSlots" :key="timeSlot">
-            <td>
-              <h6>{{ timeSlot.time }}</h6>
-            </td>
-            <td v-for="(day, index) in weekWithDates.slice(1)" :key="index">
-              <div v-if="isTimeDateConflict(timeSlot.id, day.date)">
-
-                <button @click="showBooking(day.date, timeSlot)" class="btn-icon" v-if="day.date >= minDate">
-                  <i class="fa-solid fa-plus"></i>
-                </button>
-              </div>
-              <div v-else>
-                full
-              </div>
-            </td>
-            <!-- <td v-for="(day, index) in weekWithDates.slice(1)" :key="index">
+      <div class="table-responsive">
+        <table class="booking-table table table-bordered table-striped text-center">
+          <thead>
+            <tr>
+              <th></th>
+              <th v-for="(item, index) in weekWithDates.slice(1)" :key="index">
+                <div class="table-text">{{ item.day }}</div>
+                <div class="table-text">{{ formatDate(item.date) }}</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="timeSlot in timeSlots" :key="timeSlot">
+              <td>
+                <h6 class="table-text">{{ timeSlot.time }}</h6>
+              </td>
+              <td v-for="(day, index) in weekWithDates.slice(1)" :key="index">
+                <div v-if="isTimeDateConflict(timeSlot.id, day.date)">
+                  <button @click="showBooking(day.date, timeSlot)" class="btn-booking" v-if="day.date >= minDate">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </div>
+                <div v-else>
+                  full
+                </div>
+              </td>
+              <!-- <td v-for="(day, index) in weekWithDates.slice(1)" :key="index">
               <div v-for="appointment in appointments" :key="appointment.id">
                 <div
                   v-if="appointment.date.date_field === day.date && appointment.time_id === timeSlot.id && appointment.customer_id == customer.id">
@@ -44,9 +44,11 @@
               </div>
             </td> -->
 
-          </tr>
-        </tbody>
-      </table>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 
@@ -118,7 +120,7 @@ export default {
     this.getAppointments();
     var storeData = localStorage.getItem('store');
     this.customer = JSON.parse(storeData).user;
-    if(this.customer){
+    if (this.customer) {
 
       this.getMyAppointments();
     }
