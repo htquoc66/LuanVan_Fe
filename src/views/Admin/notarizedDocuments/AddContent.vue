@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <h6>Giá trị chuyển nhượng:</h6>
-                            <input v-model="chuyen_nhuong_dat.gt" class="form-control">
+                            <input v-model="formattedPriceDat" class="form-control">
                         </div>
                         <div class="form-group mb-3">
                             <h6>Phương thức thanh toán:</h6>
@@ -114,7 +114,7 @@
                         </div>
                         <div class="form-group mb-3">
                             <h6>Giá trị giao dịch:</h6>
-                            <input v-model="mua_ban_oto.gt" class="form-control">
+                            <input v-model="formattedPriceXe" class="form-control">
                         </div>
                         <div class="form-group mb-3">
                             <h6>Phương thức thanh toán:</h6>
@@ -287,9 +287,27 @@ export default {
     },
     watch: {
     },
+    computed: {
+        formattedPriceDat: {
+            get() {
+                return this.chuyen_nhuong_dat.gt.toLocaleString();
+            },
+            set(newValue) {
+                this.chuyen_nhuong_dat.gt = parseFloat(newValue.replace(/,/g, ""));
+            },
+        },
+        formattedPriceXe: {
+            get() {
+                return this.mua_ban_oto.gt.toLocaleString();
+            },
+            set(newValue) {
+                this.mua_ban_oto.gt = parseFloat(newValue.replace(/,/g, ""));
+            },
+        }
+    },
 
     methods: {
-        formatDate, convertNumberToWords,formatPrice,
+        formatDate, convertNumberToWords, formatPrice,
         createContent() {
             if (this.selectedForm.id == 1) {
                 this.uy_quyen.ngay_thang = formatDate(this.notarizedDocument.date);
@@ -368,7 +386,7 @@ export default {
                     this.mua_ban_oto.dia_chi_b1 = this.notarizedDocument.customersB[0].address;
                 }
             }
-            else{
+            else {
                 this.info.ten_ccv = this.notarizedDocument.notary.name;
                 this.info.ngay_thang = formatDate(this.notarizedDocument.date);
                 this.info.ten_file = this.selectedForm.file;
@@ -412,7 +430,7 @@ export default {
             }
             else if (this.selectedForm.id == 3) {
                 this.data = this.mua_ban_oto;
-            } else{
+            } else {
                 this.data = this.info;
             }
             this.showLoading = true;
@@ -432,6 +450,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

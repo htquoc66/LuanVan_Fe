@@ -15,6 +15,7 @@
           <tr>
             <th>STT</th>
             <th>Tên loại</th>
+            <th>Phí hồ sơ</th>
             <th>Tùy chọn</th>
           </tr>
         </thead>
@@ -22,6 +23,8 @@
           <tr v-for="(category, index) in categories" :key="index">
             <th>{{ index + 1 }}</th>
             <td>{{ category.name }}</td>
+            <td>{{ formatPrice(category.price) }}</td>
+
             <td>
               <button class="btn-icon" @click="deleteCategory(category.id)">
                 <i class="fa-solid fa-trash"></i>
@@ -41,7 +44,7 @@
 <script>
 import axios from 'axios';
 import FormCategory from './Form.vue';
-import {initializeDataTable} from '@/utils'
+import {initializeDataTable, formatPrice} from '@/utils'
 
 export default {
   name: 'ListCategories',
@@ -59,7 +62,7 @@ export default {
     this.getCategories();
   },
   methods: {
-    initializeDataTable,
+    initializeDataTable, formatPrice,
     editCategory(id) {
       this.categoryIdToEdit = id;
       this.showModal = true;

@@ -182,57 +182,66 @@
             <div class="col-3">
                 <div class="form-group mb-3">
                     <label for="" class="h6">Ngày tạo</label>
-                    <input v-model="notarized_document.date" type="date" class="form-control">
+                    <input disabled v-model="notarized_document.date" :min="new Date().toISOString().split('T')[0]" type="date" class="form-control">
                 </div>
-                <div v-if="notarized_document.status == 5" class="form-group mb-3">
+                <div v-if="notarized_document.status > 1" class="form-group mb-3">
                     <label for="" class="h6">Loại hồ sơ</label>
                     <input disabled v-model="notarized_document.category.name" type="text" class="form-control">
                 </div>
                 <div v-else class="form-group mb-3">
                     <label for="" class="h6">Loại hồ sơ</label>
-                    <select @change="filterForms" v-model="notarized_document.category_id" class="form-select">
+                    <select  @change="filterForms" v-model="notarized_document.category_id" class="form-select"
+                    v-bind:class="{ 'is-invalid': errors.category }">
                         <option value="">--Chọn loại hồ sơ--</option>
                         <option v-for="(category, index) in categories" :value="category.id" :key="index">
                             {{ category.name }}
                         </option>
                     </select>
+                    <div class="invalid-feedback" v-if="errors.category">{{ errors.category }}</div>
+
                 </div>
-                <div v-if="notarized_document.status == 5" class="form-group mb-3">
+                <div v-if="notarized_document.status > 1" class="form-group mb-3">
                     <label for="" class="h6">Tên hồ sơ</label>
                     <input disabled v-model="notarized_document.name" type="text" class="form-control">
                 </div>
                 <div v-else class="form-group mb-3">
                     <label for="" class="h6">Tên hồ sơ</label>
-                    <input v-model="notarized_document.name" type="text" class="form-control">
+                    <input v-model="notarized_document.name" type="text" class="form-control" v-bind:class="{ 'is-invalid': errors.name }">
+                    <div class="invalid-feedback" v-if="errors.name">{{ errors.name }}</div>
+                
                 </div>
          
 
                 <div  class="form-group mb-3">
                     <label for="" class="h6">Căn cứ pháp luật:</label>
-                    <select v-if="notarized_document.status < 3" @change="selectedLawText($event)" class="form-select">
+                    <select v-if="notarized_document.status < 2" @change="selectedLawText($event)" class="form-select"
+                    v-bind:class="{ 'is-invalid': errors.selectedLawTexts }">
                         <option value="">--Chọn căn cứ pháp luật--</option>
                         <option v-for="(lawText, index) in lawTexts" :value="lawText.id">
                             {{ lawText.name }}
                         </option>
                     </select>
+                    <div class="invalid-feedback" v-if="errors.selectedLawTexts">{{ errors.selectedLawTexts }}</div>
+
                 </div>
 
                 <div class="selected" v-for="(lawText, index) in notarized_document.selectedLawTexts" :key="index">
-                    <div  v-if="notarized_document.status != 5" class="selected-delete" @click="deleteSelectedLawText(index)">
+                    <div  v-if="notarized_document.status < 2" class="selected-delete" @click="deleteSelectedLawText(index)">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </div>
-                    {{ lawText.name }}
+                    <a target="_blank" :href="'http://127.0.0.1:8000/storage/lawTexts/' + lawText.file">{{ lawText.name }}</a>
                 </div>
             </div>
 
             <div class="col-5">
 
                 <div  class="mt-4">
-                    <button v-if="notarized_document.status != 5" @click="showListCustomers('A')" class="btn btn-success mt-2">Thêm bên A</button>
-                    <h6 v-else>Khách hàng bên A:</h6>
+                    <button v-if="notarized_document.status < 2" @click="showListCustomers('A')" class="btn btn-success mt-2">Thêm bên A</button>
+                    
+                    <h6 v-else class="text-success">Khách hàng bên A:</h6>
                     <div class="selected" v-if="notarized_document.customersA.length != 0"
                         v-for="customerA in notarized_document.customersA">
-                        <div  v-if="notarized_document.status != 5" class="selected-delete" @click="deleteSelectedCustomer('A', index)">
+                        <div  v-if="notarized_document.status < 2" class="selected-delete" @click="deleteSelectedCustomer('A', index)">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
                         <div>
@@ -240,13 +249,15 @@
                             <small>Địa chỉ: {{ customerA.address }}</small>
                         </div>
                     </div>
+                    <div class="invalid-feedback d-block" v-if="errors.customersA">{{ errors.customersA }}</div>
+
                 </div>
                 <div class="mt-3">
-                    <button v-if="notarized_document.status != 5" @click="showListCustomers('B')" class="btn btn-danger mt-1">Thêm bên B</button>
-                    <h6 v-else>Khách hàng bên B:</h6>                    
+                    <button v-if="notarized_document.status < 2" @click="showListCustomers('B')" class="btn btn-danger mt-1">Thêm bên B</button>
+                    <h6 v-else class="text-danger">Khách hàng bên B:</h6>                    
                     <div class="selected" v-if="notarized_document.customersB.length > 0"
                         v-for="customerB in notarized_document.customersB">
-                        <div  v-if="notarized_document.status != 5" class="selected-delete" @click="deleteSelectedCustomer('B', index)">
+                        <div  v-if="notarized_document.status < 2" class="selected-delete" @click="deleteSelectedCustomer('B', index)">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
                         <div>
@@ -255,15 +266,16 @@
                             <small>Địa chỉ: {{ customerB.address }}</small>
                         </div>
                     </div>
+                    <div class="invalid-feedback d-block" v-if="errors.customersB">{{ errors.customersB }}</div>
+
                 </div>
             </div>
 
             <div class="col-4 mt-3">
                 <div v-if="hasPermission(1) && notarized_document.status == 2 " class="form-group mb-3">
                     <label for="" class="h6">Kế toán:</label>
-                    <select @change="selectedAccountant($event)" class="form-select">
-                        <option value="">--Chọn kế toán--</option>
-                        <option v-for="accountant in accountants" :value="accountant.id">
+                    <select v-model="notarized_document.accountant" class="form-select">
+                        <option v-for="accountant in accountants" :value="accountant">
                             {{ accountant.name }}
                         </option>
                     </select>
@@ -276,7 +288,7 @@
                     </a>
                 </div>
 
-                <div v-if="hasPermission(3)">
+                <div v-if="(hasPermission(3) && notarized_document.status < 2)">
                     <div class="form-group mb-3">
                         <label for="" class="h6">Thêm hồ sơ</label>
                         <select class="form-select" v-model="editOnline">
@@ -299,7 +311,7 @@
                         <div class="mb-3" v-show="!linkFromChild">
                             <button v-if="selectedForm != null && (selectedForm.id == 1 || selectedForm.id == 2 || selectedForm.id == 3)"
                              @click="showAddContent()" class="btn btn-dark">+ Nội dung</button>
-                            <button v-else  class="btn btn-successn" @click="callFunctionInAddContent">Tạo hồ sơ</button>
+                            <button v-else  class="btn btn-success" @click="callFunctionInAddContent">Tạo hồ sơ</button>
 
                         </div>
 
@@ -323,7 +335,7 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="" class="h6">Upload hồ sơ:</label>
+                            <label for="" class="h6">Upload hồ sơ (.docx):</label>
                             <input @change="onFileChange" type="file" class="form-control">
                         </div>
 
@@ -333,7 +345,7 @@
             </div>
 
             <hr class="mt-5">
-            <div v-if="(hasPermission(3) && notarizedDocumentId != null && notarized_document.status == 1) || notarizedDocumentId == null"
+            <div v-if="(hasPermission(3) && notarizedDocumentId != null && notarized_document.status < 2) || notarizedDocumentId == null"
                 class="d-flex justify-content-end">
                 <!-- <button v-if="hasPermission(4)" @click="save(1)" class="btn-icon">Lưu hồ sơ</button> -->
                 <button v-if="hasPermission(3)" @click="save(1)" class="btn-icon">Lưu hồ sơ</button>
@@ -343,7 +355,7 @@
 
             </div>
             <div class="d-flex justify-content-end">
-                <button v-if="hasPermission(1) && notarized_document.status == 2" class="btn-icon">Hủy hồ sơ</button>
+                <button v-if="hasPermission(1) && notarized_document.status == 2" @click="cancel(notarized_document)" class="btn-icon">Hủy hồ sơ</button>
                 &nbsp;
                 <button v-if="hasPermission(1) && notarized_document.status == 2" @click="save(3)" class="btn-blue">Duyệt hồ
                     sơ & chuyển cho kế toán</button>
@@ -477,6 +489,18 @@ export default {
             selectedCost2: [],
             selectedCost3: [],
             editOnline: false,
+            errors: {
+                name: '',
+                file: '',    
+                notary: '',
+                accountant:'',
+                selectedLawTexts: '',
+                customersA: '',
+                customersB: '',
+                costs: '',
+                category: ''
+            },
+            isValid: true,
 
         }
     },
@@ -505,6 +529,7 @@ export default {
         // vai trò trưởng phòng
         if (this.hasPermission(1)) {
             this.getStaffOfRole(2, this.accountants);
+
         }
 
         // vai trò kế toán
@@ -519,6 +544,39 @@ export default {
     },
     methods: {
         formatPrice, hasPermission,
+        validate(){
+            this.errors = {
+                name: '',
+                file: '',    
+                notary: '',
+                accountant:'',
+                selectedLawTexts: '',
+                customersA: '',
+                customersB: '',
+                costs: '',
+                category: ''
+            }
+            if(this.notarized_document.category_id == ''){
+                this.errors.category = "Vui lòng chọn loại hồ sơ!";
+                this.isValid = false;
+            }
+            if(this.notarized_document.name == ''){
+                this.errors.name = "Vui lòng nhập tên hồ sơ!";
+                this.isValid = false;
+            }
+            if(this.notarized_document.selectedLawTexts.length == 0){
+                this.errors.selectedLawTexts = "Vui lòng chọn văn bản pháp luật";
+                this.isValid = false;
+            }
+            if(this.notarized_document.customersA.length == 0){
+                this.errors.customersA = "Vui lòng chọn khách hàng bên A";
+                this.isValid = false;
+            }
+            if(this.notarized_document.customersB.length == 0){
+                this.errors.customersB = "Vui lòng chọn hách hàng bên B";
+                this.isValid = false;
+            }
+        },
         callFunctionInAddContent() {
             this.$refs.addContentRef.taohoso();
         },
@@ -569,6 +627,8 @@ export default {
 
         },
         save(status) {
+            this.validate();
+           if(this.isValid){
             this.notarized_document.status = status;
             
             if (this.hasPermission(1)) {
@@ -579,11 +639,7 @@ export default {
                 const category = this.categories.find(cat => cat.id === this.notarized_document.category_id);
                 this.notarized_document.total_cost = category.price;
             }
-            // if (this.hasPermission(4)) {
-            //     this.notification.receiverId = this.notarized_document.notary.id;
-            //     const category = this.categories.find(cat => cat.id === this.notarized_document.category_id);
-            //     this.notarized_document.total_cost = category.price;
-            // }
+       
             this.notification.message = "Hồ sơ mới chờ duyệt";
             if (this.linkFromChild != null) {
                     this.notarized_document.file = this.linkFromChild;
@@ -638,13 +694,26 @@ export default {
                     }
                 })
             }
+           } else{ alert('sai')}
+        },
+        cancel(data){
+            axios.put(`cancelDocument/${data.id}`).then(res=>{
+                if(res.data.success){
+                    this.notification.message ='Hồ sơ ' + data.id + ' bị hủy';
+                    this.notification.receiverId = data.notary.id;
+                    axios.post('sendNotification', this.notification);
+                    this.$router.push('/admin/notarizedDocuments/listAll')
+
+                }
+            })
         },
         onFileChange(event) {
             this.notarized_document.file = event.target.files[0];
         },
         async getCosts() {
             await axios.get('costs').then(res => {
-                this.costs = res.data;
+                this.costs = res.data.filter(cost => cost.deleted === 0);
+
             })
         },
         getCostsByCostTypeId(costTypeId) {
@@ -739,14 +808,14 @@ export default {
             }
         },
 
-        selectedAccountant(event) {
-            const selectedAccountantId = event.target.value;
-            const selectedAccountant = this.accountants.find(accountant => accountant.id === parseInt(selectedAccountantId));
-            this.notarized_document.accountant = {
-                id: selectedAccountant.id,
-                name: selectedAccountant.name
-            };
-        },
+        // selectedAccountant(event) {
+        //     const selectedAccountantId = event.target.value;
+        //     const selectedAccountant = this.accountants.find(accountant => accountant.id === parseInt(selectedAccountantId));
+        //     this.notarized_document.accountant = {
+        //         id: selectedAccountant.id,
+        //         name: selectedAccountant.name
+        //     };
+        // },
         deleteSelectedLawText(index) {
             this.notarized_document.selectedLawTexts.splice(index, 1);
         },
@@ -797,6 +866,7 @@ export default {
         },
     },
     computed: {
+        
         paginatedCustomers() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;

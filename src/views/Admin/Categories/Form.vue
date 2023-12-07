@@ -9,6 +9,10 @@
                     <label class="form-label">Tên danh mục:</label>
                     <input type="text" v-model="category.name" class="form-control">
                 </div>
+                <div class="form-groups mb-3">
+                    <label class="form-label">Phí hồ sơ:</label>
+                    <input type="text" v-model="category.price" class="form-control">
+                </div>
 
                 <div class="d-flex justify-content-between mt-5">
                     <button type="reset" class="btn-white" @click="closeModal">
@@ -41,7 +45,8 @@ export default {
     data() {
         return {
             category: {
-                name: ''
+                name: '',
+                price:''
             }
         }
     },

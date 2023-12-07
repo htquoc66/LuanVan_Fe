@@ -1,7 +1,7 @@
 <template>
   <div>
     <h4 class="text-center text-blue mt-2">DANH SÁCH HỒ SƠ</h4>
-      <button v-if="selectedNotarizedDocuments.length > 0" @click="taophieuthu()">Tạo phiếu thu</button>
+      <button class="btn-blue my-2" v-if="selectedNotarizedDocuments.length > 0" @click="taophieuthu()">Tạo phiếu thu</button>
 
     <table v-if="hasPermission(2)" class="myTable table table-striped  table-bordered ">
       <thead class="">

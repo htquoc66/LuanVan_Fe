@@ -129,6 +129,10 @@ export default {
             else if($notifacation.message == "Thêm bản lưu trữ"){
                 this.link = 'http://localhost:8080/admin/storages';             
             }
+            else if($notifacation.message.includes('bị hủy')){
+                this.link = 'http://localhost:8080/admin/notarizedDocuments/listCancelled';             
+
+            }
         },
         formatDateTime(inputDate) {
             // Chuyển đổi chuỗi ngày giờ thành ngày

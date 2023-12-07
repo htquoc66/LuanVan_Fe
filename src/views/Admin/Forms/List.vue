@@ -24,7 +24,7 @@
                 <tbody>
                     <tr v-for="(form, index) in forms" :key="index">
                         <th>{{ index + 1 }}</th>
-                        <td>{{ form.category_id }}</td>
+                        <td>{{ form.category.name }}</td>
                         <td>{{ form.name }}</td>
                         <td>{{ form.description }}</td>
                         <td class="d-flex">

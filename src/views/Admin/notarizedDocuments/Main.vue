@@ -9,11 +9,13 @@
                             <span >Tất cả hồ sơ</span>
 
                         </RouterLink>
+                        
                     </div>
+       
                     <div class="item" :class="{ active: $route.path === '/admin/notarizedDocuments/list' }">
                         <RouterLink class="text-dark" to="/admin/notarizedDocuments/list">
                             <i class="fa-solid fa-file px-2"></i>
-                            <span v-if="hasPermission(2)">Hồ sơ đang xử lý</span>
+                            <span v-if="hasPermission(2)">Hồ sơ chờ tính phí</span>
                             <span v-if="hasPermission(1)">Hồ chờ duyệt</span>
                             <span v-if="hasPermission(3)">Hồ sơ lưu</span>
 
@@ -25,6 +27,18 @@
                             <span v-if="hasPermission(2)">Hồ sơ đang cập nhật</span>
                             <span v-if="hasPermission(1)">Đã chuyển cho kế toán</span>
                             <span v-if="hasPermission(3)">Đã chuyển cho trưởng phòng</span>
+                        </RouterLink>
+                    </div>
+                    <div v-if="hasPermission(3)" class="item" :class="{ active: $route.path === '/admin/notarizedDocuments/listApproved' }">
+                        <RouterLink class="text-dark" to="/admin/notarizedDocuments/listApproved">
+                            <i class="fa-solid fa-file-circle-check px-2"></i>
+                            <span >Hồ sơ đã duyệt</span>
+                        </RouterLink>
+                    </div>
+                    <div v-if="hasPermission(3)" class="item" :class="{ active: $route.path === '/admin/notarizedDocuments/listCancelled' }">
+                        <RouterLink class="text-dark" to="/admin/notarizedDocuments/listCancelled">
+                            <i class="fa-solid fa-file-circle-xmark px-2"></i>
+                            <span >Hồ sơ bị hủy</span>
                         </RouterLink>
                     </div>
 

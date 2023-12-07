@@ -70,9 +70,12 @@
       </div>
       <div class="form-groups mb-4">
         <h6>Nội dung:</h6>
-        <textarea v-model="appointment.content" class="form-control" rows="3"></textarea>
+        <textarea v-model="appointment.content" class="form-control" rows="3" @blur="validate()"
+          v-bind:class="{ 'is-invalid': errors.content }"></textarea>
+        <div class="invalid-feedback" v-if="errors.content">{{ errors.content }}</div>
+
       </div>
-      <div class="d-flex justify-content-end">
+      <div class="d-flex justify-content-end ">
         <button @click="booking()" class="btn btn-success">Xác nhận</button>
         &nbsp;
         <button @click="showModal = false" class="btn btn-danger">Hủy</button>
@@ -110,6 +113,10 @@ export default {
         content: '',
         status: 1,
       },
+      errors: {
+        content: '',
+
+      },
       appointments: [],
       myAppointment: []
 
@@ -127,6 +134,18 @@ export default {
   },
   methods: {
     formatDate,
+    validate() {
+      let isValid = true;
+      this.errors = {
+        content: ''
+      }
+      if (!this.appointment.content) {
+        this.errors.content = "Nội dung hẹn không được bỏ trống!";
+        isValid = false;
+      }
+      return isValid;
+
+    },
     async getMyAppointments() {
       const response = await axios.get('myAppointments', {
         params: { customer_id: this.customer.id }
@@ -184,7 +203,9 @@ export default {
 
     },
     booking() {
-      axios.post('appointments', this.appointment).then(res => {
+      this.validate();
+      if(this.validate()){
+        axios.post('appointments', this.appointment).then(res => {
         if (res.data.success) {
           this.showModal = false;
           this.$swal.fire('Đặt lịch thành công!', '', 'success');
@@ -200,6 +221,7 @@ export default {
           }
         }
       })
+      }
     },
     formatDateForInput(date) {
       const year = date.getFullYear();

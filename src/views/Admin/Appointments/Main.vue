@@ -1,5 +1,5 @@
 <template>
-    <div class="card p-3">
+    <div v-if="hasPermission(3)" class="card p-3">
         <div class="d-flex main">
             <div class="item" :class="{ active: $route.path === '/admin/appointments/listAppointments' }">
                 <RouterLink class="text-dark" to="/admin/appointments/listAppointments">
@@ -24,7 +24,9 @@
 import { hasPermission } from '@/utils';
 
 export default {
-
+    methods:{
+        hasPermission
+    }
 }
 </script>
 

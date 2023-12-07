@@ -47,8 +47,9 @@
                     <td>{{ notarizedDocument.notary[0].name }}</td>
                     <td>
                         <span v-if="notarizedDocument.status == 1">Hồ sơ lưu</span>
+                        <span class="text-danger" v-if="notarizedDocument.status == 0">Hủy</span>
                         <span class="text-danger" v-if="notarizedDocument.status == 2">Chờ trưởng phòng duyệt</span>
-                        <span class="text-danger" v-if="notarizedDocument.status == 3">Chờ kế toán duyệt</span>
+                        <span class="text-danger" v-if="notarizedDocument.status == 3">Chờ tính phi</span>
                         <span class="text-danger" v-if="notarizedDocument.status == 4">Đang cập nhật</span>
                         <span class="text-danger" v-if="notarizedDocument.status == 5">Hoàn thành</span>
 
@@ -151,7 +152,7 @@ export default {
             case 2:
                 return 'Chờ trưởng phòng duyệt';
             case 3:
-                return 'Chờ kế toán duyệt';
+                return 'Chờ tính phí';
             case 4:
                 return 'Đang cập nhật';
             case 5:

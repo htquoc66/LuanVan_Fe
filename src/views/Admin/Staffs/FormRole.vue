@@ -28,7 +28,7 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input @change="test(3)" class="form-check-input" type="radio" name="flexRadioDefault" id="id3">
+                            <input checked @change="test(3)" class="form-check-input" type="radio" name="flexRadioDefault" id="id3">
                             <label class="form-check-label" for="id3">
                                 Công chứng viên
                             </label>
@@ -117,6 +117,7 @@ export default {
 
     created() {
         this.getPermissions();
+        this.test(3);
     },
     watch: {
         roleIdToEdit(newId, oldId) {

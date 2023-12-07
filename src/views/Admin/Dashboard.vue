@@ -2,7 +2,7 @@
     <div>
         <div class="row mb-3">
             <div class="col-4">
-                <div class="card py-3">
+                <div  class="card py-3">
                     <RouterLink to="/admin/appointments/listAppointments" class="text-dark">
                         <div class="d-flex">
                             <div class="mx-3 mb-0 alert alert-primary">
@@ -36,7 +36,7 @@
                             <i class="fa-3x text-warning fa-solid fa-users"></i>
                         </div>
                         <div>
-                            <h3>0</h3>
+                            <h3>{{ customers.length }}</h3>
                             <p>Tổng số khách hàng</p>
                         </div>
                     </div>
@@ -107,6 +107,7 @@ export default {
             chartLine: null,
             chartBar: null,
             appointments: [],
+            customers:[],
 
         };
     },
@@ -114,10 +115,16 @@ export default {
         this.getCountDocumentToday();
         this.createChartLine();
         this.createChartPie();
-        this.createChartBar(); // Thêm dòng này để tạo biểu đồ Bar khi component được mounted
+        this.createChartBar(); 
         this.getAppointments();
+        this.getCustomers();
     },
     methods: {
+        async getCustomers(){
+            await axios.get('customers').then(res=>{
+                this.customers = res.data;
+            })
+        },
         async getAppointments() {
             await axios.get('appointments').then(res => {
                 this.appointments = res.data.filter(appointment => appointment.status == 1);

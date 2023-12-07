@@ -34,11 +34,11 @@
           <td>
             <span v-if="notarizedDocument.status == 1">Hồ sơ lưu</span>
             <span class="text-danger" v-if="notarizedDocument.status == 2">Chờ trưởng phòng duyệt</span>
-            <span class="text-danger" v-if="notarizedDocument.status == 3">Chờ kế toán duyệt</span>
+            <span class="text-danger" v-if="notarizedDocument.status == 3">Chờ tính phí</span>
           </td>
           <td>{{ formatDate(notarizedDocument.date) }}</td>
           <td class="text-center">
-            <button class="btn-icon" v-if="hasPermission(3) || hasPermission(4)">
+            <button class="btn-icon" @click="deleteNotarizedDocument(notarizedDocument.id)" v-if="hasPermission(3)">
               <i class="fa-solid fa-trash"></i>
             </button>
             &nbsp;
@@ -98,7 +98,28 @@ export default {
         .catch((error) => {
           console.error(error);
         });
-    }
+    },
+    deleteNotarizedDocument(id) {
+      this.$swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        icon: 'warning',
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.delete(`notarizedDocuments/${id}`).then(res => {
+            if (res.data.success) {
+              this.$swal.fire('Đã xóa thành công!', '', 'success');
+              this.getNotarizedDocuments(1, this.admin.id);
+            }
+          });
+        }
+      });
+    },
 
   }
 

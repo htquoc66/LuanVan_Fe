@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-6 side-image">
                 </div>
-                
+
                 <div class="col-md-6 right">
                     <form @submit.prevent="register()" class="input-box">
                         <header>Đăng ký tài khoản</header>
@@ -21,12 +21,16 @@
                             <label>Số điện thoại</label>
                         </div>
                         <div class="input-field">
-                            <input v-model="customer.password" type="password" class="input" required>
-                            <label>Mật khẩu</label>
+                            <input type="password" v-model="customer.password" class="input" id="password" required
+                                @blur="validate()" :class="{ 'is-invalid': errors.password }">
+                            <div class="invalid-feedback" v-if="errors.password">{{ errors.password }}</div>
+                            <label for="password">Mật khẩu</label>
                         </div>
                         <div class="input-field">
-                            <input v-model="customer.c_password" type="password" class="input" required>
-                            <label>Nhập lại mật khẩu</label>
+                            <input type="password" v-model="customer.c_password" class="input" id="c_password" required
+                                @blur="validate()" :class="{ 'is-invalid': errors.c_password }">
+                            <div class="invalid-feedback" v-if="errors.c_password">{{ errors.c_password }}</div>
+                            <label for="c_password">Nhập lại mật khẩu</label>
                         </div>
                         <div class="input-field">
                             <input type="submit" class="submit" value="Đăng ký">
@@ -47,23 +51,52 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            customer:{
-                type_id:1,
-                name:'',
-                phone:'',
-                email:'',
-                password:'',
+            customer: {
+                type_id: 1,
+                name: '',
+                phone: '',
+                email: '',
+                password: '',
                 c_password: ''
-            }
+            },
+            errors: {
+                password: '',
+                c_password: ''
+            },
+            isValid: true
+
         }
     },
     methods: {
-        register(){
-            axios.post('customers', this.customer).then(res=>{
-                if(res.data.success){
-                    this.$router.push('/login')
-                }
-            })
+        validate() {
+            this.isValid = true;
+            this.errors.password = '';
+            this.errors.c_password = '';
+            if (!this.checkStrongPassword(this.customer.password)) {
+                this.errors.password = "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, và ký tự đặc biệt";
+                this.isValid = false;
+            }
+            if (this.customer.c_password != this.customer.password) {
+                this.errors.c_password = "Nhập lại mật khẩu không đúng";
+                this.isValid = false;
+            }
+
+        },
+        register() {
+            this.validate();
+            if (this.isValid) {
+
+                axios.post('customers', this.customer).then(res => {
+                    if (res.data.success) {
+                        this.$router.push('/login')
+                    }
+                })
+            } 
+        },
+        checkStrongPassword(password) {
+            // Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, và ký tự đặc biệt
+            const regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+            return regex.test(password);
         }
     }
 }
@@ -219,7 +252,7 @@ span a:hover {
 
 @media only screen and (max-width: 768px) {
     .side-image {
-       display: none;
+        display: none;
     }
 
     .text {
@@ -238,7 +271,4 @@ span a:hover {
         width: 100%;
     }
 }
-
-
-
 </style>

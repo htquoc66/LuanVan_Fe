@@ -132,6 +132,16 @@ const routes = [
             component: () => import("../views/Admin/notarizedDocuments/List.vue"),
           },
           {
+            path: "listApproved",
+            name: "listApproved",
+            component: () => import("../views/Admin/notarizedDocuments/ListApproved.vue"),
+          },
+          {
+            path: "listCancelled",
+            name: "listCancelled",
+            component: () => import("../views/Admin/notarizedDocuments/ListCancelled.vue"),
+          },
+          {
             path: "listMoved",
             name: "listMoved",
             component: () => import("../views/Admin/notarizedDocuments/ListMoved.vue"),

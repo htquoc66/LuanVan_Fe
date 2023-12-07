@@ -14,7 +14,7 @@
             <thead class="">
                 <tr>
                     <th>STT</th>
-                    <th>Danh mục</th>
+                    <!-- <th>Danh mục</th> -->
                     <th>Tên</th>
                     <th>Ngày hiệu lực</th>
                     <th>Trạng thái</th>
@@ -25,7 +25,7 @@
             <tbody>
                 <tr v-for="(lawText, index) in lawTexts" :key="index">
                     <th>{{ index + 1 }}</th>
-                    <td>{{ lawText.category_id }}</td>
+                    <!-- <td>{{ lawText.category.name }}</td> -->
 
                     <td>{{ lawText.name }}</td>
                     <td>{{ formatDate(lawText.effective_date) }}</td>

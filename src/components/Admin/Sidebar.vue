@@ -18,7 +18,7 @@
                     <span class="text">Quản lý lịch hẹn</span>
                 </RouterLink>
             </li>
-            <li :class="{ active: $route.path ==='/admin/customers' }">
+            <li v-if="hasPermission(1) || hasPermission(3)" :class="{ active: $route.path ==='/admin/customers' }">
                 <RouterLink to="/admin/customers">
                     <i class='bx bxs-group'></i>
                     <span class="text">Quản lý khách hàng</span>
@@ -37,7 +37,7 @@
                 </RouterLink>
             </li>
 
-            <li :class="{ active: $route.path === '/admin/lawTexts' }">
+            <li v-if="hasPermission(1) || hasPermission(3)" :class="{ active: $route.path === '/admin/lawTexts' }">
                 <RouterLink to="/admin/lawTexts">
                     <i class='bx bxs-news'></i>
                     <span class="text">Quản lý văn bản pháp luật</span>
@@ -64,14 +64,14 @@
                 </RouterLink>
             </li>
 
-            <li :class="{ active: $route.path === '/admin/categories' }">
+            <li v-if="hasPermission(1) || hasPermission(3)" :class="{ active: $route.path === '/admin/categories' }">
                 <RouterLink to="/admin/categories">
                     <i class='bx bxs-dashboard'></i>
                     <span class="text">Quản lý danh mục</span>
                 </RouterLink>
             </li>
 
-            <li :class="{ active: $route.path === '/admin/setting' }">
+            <li v-if="hasPermission(1)" :class="{ active: $route.path === '/admin/setting' }">
                 <RouterLink to="/admin/setting">
                     <i class='bx bxs-cog text-danger'></i>
                     <span class="text">Cài đặt</span>

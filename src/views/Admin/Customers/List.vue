@@ -19,7 +19,7 @@
         <thead class="">
           <tr>
             <th>Loại KH</th>
-            <th >Họ tên</th>
+            <th>Họ tên</th>
             <th>Ngày sinh</th>
             <th style="width: 20% !important;">Giới tính</th>
             <th>Email</th>
@@ -28,29 +28,34 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(customer, index) in customers" :key="index" @click="toggleDetails(index)" >
+          <tr v-for="(customer, index) in customers" :key="index" @click="toggleDetails(index)">
             <td>{{ customer.type }}
-              <p v-if=" customer.expanded" class="mt-2 mb-0"><strong>Số CCCD:</strong> {{ customer.idCard_number }}</p>             
-            
+              <p v-if="customer.expanded" class="mt-2 mb-0"><strong>Số CCCD:</strong> {{ customer.idCard_number }}</p>
+
             </td>
-            <td>{{ customer.name }}         
-              <p v-if=" customer.expanded" class="mt-2 mb-0"><strong>Ngày cấp:</strong> {{ customer.idCard_issued_date }}</p>
+            <td>{{ customer.name }}
+              <p v-if="customer.expanded" class="mt-2 mb-0"><strong>Ngày cấp:</strong> {{ customer.idCard_issued_date }}
+              </p>
 
             </td>
             <td>{{ formatDate(customer.date_of_birth) }}
-              <p v-if=" customer.expanded" class="mt-2 mb-0"><strong>Nơi cấp:</strong> {{ customer.idCard_issued_place }}</p>
+              <p v-if="customer.expanded" class="mt-2 mb-0"><strong>Nơi cấp:</strong> {{ customer.idCard_issued_place }}
+              </p>
 
             </td>
             <td>{{ customer.gender }}
-              <p v-if=" customer.expanded" class="mt-2 mb-0"><strong>Địa chỉ:</strong> {{ customer.address }}</p>
+              <p v-if="customer.expanded" class="mt-2 mb-0"><strong>Địa chỉ:</strong> {{ customer.address }}</p>
 
             </td>
             <td>{{ customer.email }}
             </td>
             <td>{{ customer.phone }}</td>
             <td>
-              <button class="btn-icon" @click="deleteCustomer(customer.id)">
+              <!-- <button class="btn-icon" @click="deleteCustomer(customer.id)">
                 <i class="fa-solid fa-trash "></i>
+              </button> -->
+              <button class="btn-icon mt-1" @click="showDetail(customer)">
+                <i class="fa-solid fa-magnifying-glass"></i>
               </button>
               &nbsp;
               <button class="btn-icon mt-1" @click="editCustomer(customer.id)">
@@ -58,9 +63,50 @@
               </button>
             </td>
           </tr>
-         
+        </tbody>
+      </table>
+    </div>
+  </div>
 
+  <div class="modal-container" v-show="showList">
+    <div class="modal-overlay" @click="showList = false"></div>
+    <div class="modal-content">
+      <span class="modal-close" @click="showList = false"><i class="fa-solid fa-circle-xmark"></i></span>
 
+      <h4 class="text-blue text-center py-3">Danh sách hồ sơ</h4>
+      <div>Tên khách hàng: {{ selectedCustomer.name }}</div>
+      <div class="mb-2">Số điện thoại: {{ selectedCustomer.phone }}</div>
+      <table class="myTable table table-striped  table-bordered ">
+        <thead>
+          <tr>
+            <th>Số hồ sơ</th>
+            <th>Tên hồ sơ</th>
+            <th>Ngày tạo</th>
+            <th>Trạng thái</th>
+            <th>Chi phí</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(document, index) in documents" :key="index">
+            <td>{{ document.id }}</td>
+            <td>{{ document.name }}</td>
+            <td>{{ formatDate(document.date) }}</td>
+            <td>
+              <span class="text-danger" v-if="document.status == 2">Chờ trưởng phòng duyệt</span>
+              <span class="text-danger" v-if="document.status == 3">Chờ kế toán duyệt</span>
+              <span class="text-danger" v-if="document.status == 4">Đang cập nhật</span>
+              <span class="text-danger" v-if="document.status == 5">Hoàn thành</span>
+            </td>
+            <td>
+              <span v-if="document.status == 5">
+                {{ formatPrice(document.total_cost) }} vnđ
+              </span>
+              <span v-else>
+                Đang chờ tính
+              </span>
+            </td>
+
+          </tr>
         </tbody>
       </table>
     </div>
@@ -71,7 +117,7 @@
 import axios from 'axios';
 import $ from 'jquery';
 import FormCustomer from './Form.vue';
-import { formatDate, hasPermission } from '@/utils';
+import { formatDate, hasPermission, formatPrice } from '@/utils';
 import ExcelJS from 'exceljs';
 
 export default {
@@ -84,13 +130,24 @@ export default {
       customers: [],
       showModal: false,
       customerIdToEdit: null,
+      showList: false,
+      documents: [],
+      selectedCustomer:''
     };
   },
   created() {
     this.getCustomers();
   },
   methods: {
-    hasPermission,
+    hasPermission,formatPrice,
+    showDetail(customer) {
+      this.selectedCustomer = customer;
+      axios.get(`notarizedDocuments/customer-${customer.id}`).then(res => {
+        this.documents = res.data;
+        this.initializeDataTable();
+      })
+      this.showList = true;
+    },
     async exportToExcel() {
       try {
         const workbook = new ExcelJS.Workbook();
@@ -141,8 +198,8 @@ export default {
     formatDate,
     toggleDetails(index) {
       console.log('Toggling details for index:', index);
-  this.customers[index].expanded = !this.customers[index].expanded;
-  console.log('Expanded state:', this.customers[index].expanded);
+      this.customers[index].expanded = !this.customers[index].expanded;
+      console.log('Expanded state:', this.customers[index].expanded);
 
     },
     initializeDataTable() {

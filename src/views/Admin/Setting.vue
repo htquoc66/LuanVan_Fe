@@ -10,26 +10,26 @@
                 <div class="col-6">
                     <div class="form-group mb-3">
                         <label for="" class="form-label">Client id:</label>
-                        <input v-model="data.client_id" type="text" class="form-control">
+                        <input v-model="drive.client_id" type="text" class="form-control">
                     </div>
                     <div class="form-group mb-3">
                         <label for="" class="form-label">Client Secret:</label>
-                        <input v-model="data.client_secret" type="text" class="form-control">
+                        <input v-model="drive.client_secret" type="text" class="form-control">
                     </div>
                     <div class="form-group mb-3">
                         <label for="" class="form-label">Refresh Token:</label>
-                        <input v-model="data.refresh_token" type="text" class="form-control">
+                        <input v-model="drive.refresh_token" type="text" class="form-control">
                     </div>
                 </div>
 
                 <div class="col-6">
                     <div class="form-group mb-3">
                         <label for="" class="form-label">ID thư mục lưu trữ:</label>
-                        <input v-model="data.folder_id" type="text" class="form-control">
+                        <input v-model="drive.folder_id" type="text" class="form-control">
                     </div>
                     <div class="form-group mb-3">
                         <label for="" class="form-label">ID thư mục lưu hồ sơ:</label>
-                        <input v-model="data.folder_id_2" type="text" class="form-control">
+                        <input v-model="drive.folder_id_2" type="text" class="form-control">
                     </div>
 
 
@@ -47,11 +47,11 @@
             </h6>
             <div class="form-group mb-3">
                 <label for="" class="form-label">Email:</label>
-                <input v-model="data.client_id" type="text" class="form-control">
+                <input v-model="mail.mail_username" type="text" class="form-control">
             </div>
             <div class="form-group mb-3">
                 <label for="" class="form-label">Mật khẩu ứng dụng:</label>
-                <input v-model="data.client_secret" type="text" class="form-control">
+                <input v-model="mail.mail_password" type="text" class="form-control">
             </div>
 
             <div>
@@ -70,21 +70,31 @@ export default {
 
     data() {
         return {
-            data: {
+            drive: {
                 client_id: '',
                 client_secret: '',
                 refresh_token: '',
                 folder_id: '',
                 folder_id_1: '',
                 folder_id_2: ''
-
+            },
+            mail:{
+                mail_username:'',
+                mail_password:''
             }
         }
     },
     methods: {
         saveDrive() {
-            axios.post('update-env-config', this.data).then(res => {
-                console.log(res.data)
+            axios.post('update-drive-config', this.drive).then(res => {
+                if (res.data.success) {
+                    this.$swal.fire('Đã sưả thành công!', '', 'success');
+
+                }
+            })
+        },
+        saveMail() {
+            axios.post('update-mail-config', this.mail).then(res => {
                 if (res.data.success) {
                     this.$swal.fire('Đã sưả thành công!', '', 'success');
 

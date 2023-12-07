@@ -9,7 +9,6 @@
         <i class="fa-solid fa-plus"></i> Thêm mới
       </button>
     </div>
-
     <table class="myTable table table-striped  table-bordered ">
       <thead class="">
         <tr>
@@ -67,7 +66,7 @@ export default {
     formatPrice,initializeDataTable,
     async getCosts() {
       await axios.get('costs').then(res => {
-        this.costs = res.data;
+        this.costs = res.data.filter(cost => cost.deleted === 0);
         this.initializeDataTable();
       })
     },

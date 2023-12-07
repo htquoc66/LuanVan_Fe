@@ -183,27 +183,29 @@ export default {
                this.customer.rating = rating;
                this.errors.rating = '';
           },
-          submitReview() {
+          async submitReview() {
                if (!this.customer) {
-                    alert('Đăng nhập');
+                    this.$swal.fire({
+                         icon: 'error',
+                         text: 'Vui lòng đăng nhập!',
+                         html: '<a href="/login">Vui lòng đăng nhập!</a>',
+                         didClose: () => {
+                              window.location.href = "/login";
+                         }
+                    });
+
                } else {
                     // Kiểm tra xem người dùng đã đánh giá chưa
-                    const hasUserReviewed = this.reviews.some(review => review.customer_id === this.customer.id);
-                    const check = axios.get(`check-customer/${this.customer.id}`);
+                    // const hasUserReviewed = this.reviews.some(review => review.customer_id === this.customer.id);
+                    const check = await axios.get(`check-customer/${this.customer.id}`);
 
-                    if (hasUserReviewed) {
-                         this.$swal.fire({
-                              icon: 'error',
-                              text: 'Bạn đã đánh giá trước đó không thể đánh giá lại!',
-                         })
-                    }
-                    else if (this.review.rating == '') {
+                    if (this.review.rating == '') {
                          this.errors.rating = "Vui lòng chọn số sao!";
                     }
-                    else if (!check.success) {
+                    else if (!check.data.success) {
                          this.$swal.fire({
                               icon: 'error',
-                              text: 'Bạn chưa sử dụng dịch vụ của chúng tôi. Vui lòng đánh giá sau!',
+                              text: 'Mỗi lượt chông chứng sẽ được đánh giá một lần!',
                          })
                     }
                     else {
@@ -214,6 +216,8 @@ export default {
                                    this.getAllReviews();
                               }
                          });
+                         this.review.content = '';
+                         this.review.rating = '';
                     }
                }
           },
