@@ -26,7 +26,7 @@
                     <select v-model="lawText.status" class="form-select">
                         <option value="Đang áp dụng">Đang áp dụng</option>
                         <option value="Hết hiệu lực">Hết hiệu lực</option>
-                        <option value="Bị thay thế">Bị thay thế</option>
+                        <!-- <option value="Bị thay thế">Bị thay thế</option> -->
 
                     </select>
                 </div>
@@ -105,7 +105,6 @@ export default {
         async getLawText(lawTextId) {
             if (lawTextId != null) {
                 await axios.get(`lawTexts/${lawTextId}`).then(res => {
-                    console.log(res.data)
                     this.lawText = res.data;
                 })
             }

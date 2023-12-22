@@ -176,13 +176,14 @@
                 </div>
             </div>
 
-
         </div>
         <div v-else class="row mt-5">
+        
             <div class="col-3">
                 <div class="form-group mb-3">
                     <label for="" class="h6">Ngày tạo</label>
-                    <input disabled v-model="notarized_document.date" :min="new Date().toISOString().split('T')[0]" type="date" class="form-control">
+                    <input disabled v-model="notarized_document.date" :min="new Date().toISOString().split('T')[0]"
+                        type="date" class="form-control">
                 </div>
                 <div v-if="notarized_document.status > 1" class="form-group mb-3">
                     <label for="" class="h6">Loại hồ sơ</label>
@@ -190,8 +191,8 @@
                 </div>
                 <div v-else class="form-group mb-3">
                     <label for="" class="h6">Loại hồ sơ</label>
-                    <select  @change="filterForms" v-model="notarized_document.category_id" class="form-select"
-                    v-bind:class="{ 'is-invalid': errors.category }">
+                    <select @change="categoryChange()" v-model="notarized_document.category_id" class="form-select"
+                        v-bind:class="{ 'is-invalid': errors.category }">
                         <option value="">--Chọn loại hồ sơ--</option>
                         <option v-for="(category, index) in categories" :value="category.id" :key="index">
                             {{ category.name }}
@@ -206,18 +207,19 @@
                 </div>
                 <div v-else class="form-group mb-3">
                     <label for="" class="h6">Tên hồ sơ</label>
-                    <input v-model="notarized_document.name" type="text" class="form-control" v-bind:class="{ 'is-invalid': errors.name }">
+                    <input v-model="notarized_document.name" type="text" class="form-control"
+                        v-bind:class="{ 'is-invalid': errors.name }">
                     <div class="invalid-feedback" v-if="errors.name">{{ errors.name }}</div>
-                
-                </div>
-         
 
-                <div  class="form-group mb-3">
+                </div>
+
+
+                <div class="form-group mb-3">
                     <label for="" class="h6">Căn cứ pháp luật:</label>
                     <select v-if="notarized_document.status < 2" @change="selectedLawText($event)" class="form-select"
-                    v-bind:class="{ 'is-invalid': errors.selectedLawTexts }">
+                        v-bind:class="{ 'is-invalid': errors.selectedLawTexts }">
                         <option value="">--Chọn căn cứ pháp luật--</option>
-                        <option v-for="(lawText, index) in lawTexts" :value="lawText.id">
+                        <option v-for="(lawText, index) in filteredLawTexts" :value="lawText.id">
                             {{ lawText.name }}
                         </option>
                     </select>
@@ -226,22 +228,25 @@
                 </div>
 
                 <div class="selected" v-for="(lawText, index) in notarized_document.selectedLawTexts" :key="index">
-                    <div  v-if="notarized_document.status < 2" class="selected-delete" @click="deleteSelectedLawText(index)">
+                    <div v-if="notarized_document.status < 2" class="selected-delete" @click="deleteSelectedLawText(index)">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </div>
-                    <a target="_blank" :href="'http://127.0.0.1:8000/storage/lawTexts/' + lawText.file">{{ lawText.name }}</a>
+                    <a target="_blank" :href="'http://127.0.0.1:8000/storage/lawTexts/' + lawText.file">{{ lawText.name
+                    }}</a>
                 </div>
             </div>
 
             <div class="col-5">
 
-                <div  class="mt-4">
-                    <button v-if="notarized_document.status < 2" @click="showListCustomers('A')" class="btn btn-success mt-2">Thêm bên A</button>
-                    
+                <div class="mt-4">
+                    <button v-if="notarized_document.status < 2" @click="showListCustomers('A')"
+                        class="btn btn-success mt-2">Thêm bên A</button>
+
                     <h6 v-else class="text-success">Khách hàng bên A:</h6>
                     <div class="selected" v-if="notarized_document.customersA.length != 0"
                         v-for="customerA in notarized_document.customersA">
-                        <div  v-if="notarized_document.status < 2" class="selected-delete" @click="deleteSelectedCustomer('A', index)">
+                        <div v-if="notarized_document.status < 2" class="selected-delete"
+                            @click="deleteSelectedCustomer('A', index)">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
                         <div>
@@ -253,11 +258,13 @@
 
                 </div>
                 <div class="mt-3">
-                    <button v-if="notarized_document.status < 2" @click="showListCustomers('B')" class="btn btn-danger mt-1">Thêm bên B</button>
-                    <h6 v-else class="text-danger">Khách hàng bên B:</h6>                    
+                    <button v-if="notarized_document.status < 2" @click="showListCustomers('B')"
+                        class="btn btn-danger mt-1">Thêm bên B</button>
+                    <h6 v-else class="text-danger">Khách hàng bên B:</h6>
                     <div class="selected" v-if="notarized_document.customersB.length > 0"
                         v-for="customerB in notarized_document.customersB">
-                        <div  v-if="notarized_document.status < 2" class="selected-delete" @click="deleteSelectedCustomer('B', index)">
+                        <div v-if="notarized_document.status < 2" class="selected-delete"
+                            @click="deleteSelectedCustomer('B', index)">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
                         <div>
@@ -272,16 +279,22 @@
             </div>
 
             <div class="col-4 mt-3">
-                <div v-if="hasPermission(1) && notarized_document.status == 2 " class="form-group mb-3">
+                <div v-if="hasPermission(1) && notarized_document.status == 2" class="form-group mb-3">
                     <label for="" class="h6">Kế toán:</label>
-                    <select v-model="notarized_document.accountant" class="form-select">
+                    <select v-model="notarized_document.accountant" class="form-select"
+                        v-bind:class="{ 'is-invalid': errors.accountant }">
                         <option v-for="accountant in accountants" :value="accountant">
                             {{ accountant.name }}
                         </option>
                     </select>
-                </div>
+                    <div class="invalid-feedback" v-if="errors.accountant">{{ errors.accountant }}</div>
 
-                <div class="mt-3 p-4" v-if="notarized_document.file != ''">
+                </div>
+          
+                <div class="invalid-feedback d-block" v-if="errors.file">{{ errors.file }}</div>
+
+               
+                <div class="mt-3 p-4" v-if="notarized_document.file !== '' && (typeof notarized_document.file !== 'object') " >
                     <a target="_blank" :href="'https://docs.google.com/document/d/' + notarized_document.file" class="">
                         <i class="fa-solid fa-file-word fa-2x"></i>
                         Xem hồ sơ
@@ -309,14 +322,16 @@
                             </select>
                         </div>
                         <div class="mb-3" v-show="!linkFromChild">
-                            <button v-if="selectedForm != null && (selectedForm.id == 1 || selectedForm.id == 2 || selectedForm.id == 3)"
-                             @click="showAddContent()" class="btn btn-dark">+ Nội dung</button>
-                            <button v-else  class="btn btn-success" @click="callFunctionInAddContent">Tạo hồ sơ</button>
+                            <button
+                                v-if="selectedForm != null && (selectedForm.id == 1 || selectedForm.id == 2 || selectedForm.id == 3)"
+                                @click="showAddContent()" class="btn btn-dark">+ Nội dung</button>
+                            <button v-else class="btn btn-success" @click="callFunctionInAddContent">Tạo hồ sơ</button>
 
                         </div>
 
                         <div class="">
-                            <a target="_blank" v-show="linkFromChild" :href="'https://docs.google.com/document/d/' + linkFromChild" class="">
+                            <a target="_blank" v-show="linkFromChild"
+                                :href="'https://docs.google.com/document/d/' + linkFromChild" class="">
                                 <i class="fa-solid fa-file-word fa-2x"></i>
                                 Hồ sơ vừa tạo
                             </a>
@@ -355,13 +370,41 @@
 
             </div>
             <div class="d-flex justify-content-end">
-                <button v-if="hasPermission(1) && notarized_document.status == 2" @click="cancel(notarized_document)" class="btn-icon">Hủy hồ sơ</button>
+                <button v-if="hasPermission(1) && notarized_document.status == 2" @click="showCancelModal(notarized_document)"
+                    class="btn-icon">Hủy hồ sơ</button>
                 &nbsp;
                 <button v-if="hasPermission(1) && notarized_document.status == 2" @click="save(3)" class="btn-blue">Duyệt hồ
                     sơ & chuyển cho kế toán</button>
             </div>
         </div>
 
+    </div>
+    <div class="modal-container" v-show="showModalCancel">
+        <div class="modal-overlay" @click="showModalCancel = false"></div>
+        <div class="modal-content" style="width: 50vw;">
+            <span class="modal-close" @click="showModalCancel = false"><i class="fa-solid fa-circle-xmark"></i></span>
+
+            <h4 class="text-blue text-center mb-3">Hủy hồ sơ</h4>
+            <div class="mb-3">
+                <label  class="form-label h6">Mã hồ sơ</label>
+                <input :value="selectedDocument.id" disabled type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label  class="form-label h6">Tên hồ sơ</label>
+                <input :value="selectedDocument.name" disabled type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label h6">Lý do hủy</label>
+                <textarea v-model="selectedDocument.reason" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <div>
+                <button class="btn btn-success" @click="cancel()">Xác nhận hủy</button>
+                &nbsp;
+                <button class="btn btn-danger">Đóng</button>
+
+            </div>
+
+        </div>
     </div>
 
     <div class="modal-container" v-show="showList">
@@ -386,7 +429,7 @@
             <div class="list-customers">
                 <hr class="m-0">
                 <div @click="selectedCustomer(customer)" class="customer pt-3"
-                    v-for="(customer, index) in paginatedCustomers" :key="index" >
+                    v-for="(customer, index) in paginatedCustomers" :key="index">
                     <!-- Hiển thị thông tin khách hàng ở đây -->
                     <p class="px-4"> {{ customer.name }} - <i>{{ customer.address }}</i></p>
                     <p class="px-4"> {{ customer.phone }} - {{ customer.email }}</p>
@@ -422,8 +465,8 @@
             </ul>
         </div>
     </div>
-    <AddContent ref="addContentRef" :showModalAddContent="showModalAddContent" @close="showModalAddContent = false" :selectedForm="selectedForm"
-        :notarizedDocument="notarized_document" @send-link="linkFromChild = $event" />
+    <AddContent ref="addContentRef" :showModalAddContent="showModalAddContent" @close="showModalAddContent = false"
+        :selectedForm="selectedForm" :notarizedDocument="notarized_document" @send-link="linkFromChild = $event" />
 </template>
 
 <script>
@@ -448,6 +491,8 @@ export default {
             selectedForm: null,
             forms: [],
             filteredForms: [],
+            filteredLawTexts: [],
+
             customers: [],
             lawTexts: [],
             costs: [],
@@ -491,16 +536,19 @@ export default {
             editOnline: false,
             errors: {
                 name: '',
-                file: '',    
+                file: '',
                 notary: '',
-                accountant:'',
+                accountant: '',
                 selectedLawTexts: '',
                 customersA: '',
                 customersB: '',
                 costs: '',
-                category: ''
+                category: '',
+                accountant:''
             },
             isValid: true,
+            showModalCancel: false,
+            selectedDocument:[],
 
         }
     },
@@ -544,36 +592,55 @@ export default {
     },
     methods: {
         formatPrice, hasPermission,
-        validate(){
+        validate() {
+            this.isValid = true;
             this.errors = {
                 name: '',
-                file: '',    
+                file: '',
                 notary: '',
-                accountant:'',
+                accountant: '',
                 selectedLawTexts: '',
                 customersA: '',
                 customersB: '',
                 costs: '',
-                category: ''
+                category: '',
+                accountant:''
+
             }
-            if(this.notarized_document.category_id == ''){
+            if (this.notarized_document.category_id == '') {
                 this.errors.category = "Vui lòng chọn loại hồ sơ!";
                 this.isValid = false;
             }
-            if(this.notarized_document.name == ''){
+            if (this.notarized_document.name == '') {
                 this.errors.name = "Vui lòng nhập tên hồ sơ!";
                 this.isValid = false;
             }
-            if(this.notarized_document.selectedLawTexts.length == 0){
+            if (this.notarized_document.selectedLawTexts.length == 0) {
                 this.errors.selectedLawTexts = "Vui lòng chọn văn bản pháp luật";
                 this.isValid = false;
             }
-            if(this.notarized_document.customersA.length == 0){
+            if (this.notarized_document.customersA.length == 0 ) {
                 this.errors.customersA = "Vui lòng chọn khách hàng bên A";
                 this.isValid = false;
             }
-            if(this.notarized_document.customersB.length == 0){
+            if(this.notarized_document.customersA.length > 2){
+                this.errors.customersA = "Mỗi bên tối đa 2 khách hàng";
+                this.isValid = false;
+            }
+            if (this.notarized_document.customersB.length == 0) {
                 this.errors.customersB = "Vui lòng chọn hách hàng bên B";
+                this.isValid = false;
+            }
+            if(this.notarized_document.customersB.length > 2){
+                this.errors.customersB = "Mỗi bên tối đa 2 khách hàng";
+                this.isValid = false;
+            }
+            if(this.notarized_document.accountant == ''){
+                this.errors.accountant = "Vui lòng chọn kế toán";
+                this.isValid = false;
+            }
+            if(this.notarized_document.file == ''){
+                this.errors.file = "Vui lòng thêm file hồ sơ";
                 this.isValid = false;
             }
         },
@@ -587,11 +654,24 @@ export default {
                 this.showModalAddContent = true;
             }
         },
-        filterForms() {            
+        categoryChange(){
+            this.filterLawTexts();
+            this.filterForms();
+        },
+        filterForms() {
             const selectedCategoryId = this.notarized_document.category_id;
             if (selectedCategoryId) {
                 // Nếu đã chọn loại hồ sơ, lọc danh sách để hiển thị
                 this.filteredForms = this.forms.filter(form => form.category_id === selectedCategoryId);
+            }
+        },
+        filterLawTexts(){
+            const selectedCategoryId = this.notarized_document.category_id;
+            console.log(selectedCategoryId)
+            console.log(this.lawTexts)
+            if (selectedCategoryId) {
+                // Nếu đã chọn loại hồ sơ, lọc danh sách để hiển thị
+                this.filteredLawTexts = this.lawTexts.filter(item => item.category.id === selectedCategoryId);
             }
         },
         addToSelectedCost(cost, selectedCost) {
@@ -628,85 +708,107 @@ export default {
         },
         save(status) {
             this.validate();
-           if(this.isValid){
-            this.notarized_document.status = status;
-            
-            if (this.hasPermission(1)) {
-                this.notification.receiverId = this.notarized_document.accountant.id;
+            if(status == 2){
+                this.isValid = true;
             }
-            if (this.hasPermission(3)) {
-                this.notification.receiverId = this.notarized_document.manager.id;
-                const category = this.categories.find(cat => cat.id === this.notarized_document.category_id);
-                this.notarized_document.total_cost = category.price;
-            }
-       
-            this.notification.message = "Hồ sơ mới chờ duyệt";
-            if (this.linkFromChild != null) {
+            console.log(this.isValid)
+            if (this.isValid) {
+                this.notarized_document.status = status;
+                if (this.hasPermission(1)) {
+                    this.notification.receiverId = this.notarized_document.accountant.id;
+                }
+                if (this.hasPermission(3)) {
+                    this.notification.receiverId = this.notarized_document.manager.id;
+                    const category = this.categories.find(cat => cat.id === this.notarized_document.category_id);
+                    this.notarized_document.total_cost = category.price;
+                }
+
+                this.notification.message = "Hồ sơ mới chờ duyệt";
+                if (this.linkFromChild != null) {
                     this.notarized_document.file = this.linkFromChild;
                 }
-            if (this.notarizedDocumentId == null) {
-         
-                axios.post('notarizedDocuments', this.notarized_document, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                }).then(res => {
-                    console.log(res.data)
-                    if (res.data.success) {
-                        if (this.hasPermission(3) && status == 1) {
-                            this.$router.push('/admin/notarizedDocuments/list')
-                        }
-                        if ((this.hasPermission(3) && status == 2) || (this.hasPermission(1) && status == 3)) {
-                            this.$router.push('/admin/notarizedDocuments/listMoved')
-                            axios.post('sendNotification', this.notification);
-                        }
-                    }
-                })
-            }
-            else {
-                if (status == 4) {
-                    this.notarized_document.costs = this.selectedCost1.concat(this.selectedCost2, this.selectedCost3);
-                }
-                axios.post(`notarizedDocuments/${this.notarizedDocumentId}`, this.notarized_document, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                }).then(res => {
-                    if (res.data.success) {
-                        if ((this.hasPermission(3) && status == 1)) {
-                            this.$router.push('/admin/notarizedDocuments/list')
-                        }
-                        if ((this.hasPermission(3) && status == 2) || (this.hasPermission(1) && status == 3)
-                            || this.hasPermission(2) && status == 4) {
-                            this.$router.push('/admin/notarizedDocuments/listMoved')
-                           
-                            if (status != 4) {
-                                axios.post('sendNotification', this.notification);
-                            }
-                            if(status == 4){
-                                this.notification.receiverId = this.notarized_document.manager.id;
-                                this.notification.message = "Thêm bản lưu trữ";
-                                axios.post('sendNotification', this.notification);
-                                axios.post('storages', { notarized_document_id: this.notarizedDocumentId })
-                            }
-                        }
-                        
-                    }
-                })
-            }
-           } else{ alert('sai')}
-        },
-        cancel(data){
-            axios.put(`cancelDocument/${data.id}`).then(res=>{
-                if(res.data.success){
-                    this.notification.message ='Hồ sơ ' + data.id + ' bị hủy';
-                    this.notification.receiverId = data.notary.id;
-                    axios.post('sendNotification', this.notification);
-                    this.$router.push('/admin/notarizedDocuments/listAll')
+                if (this.notarizedDocumentId == null) {
 
+                    axios.post('notarizedDocuments', this.notarized_document, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                    }).then(res => {
+                        console.log(res.data)
+                        if (res.data.success) {
+                            if (this.hasPermission(3) && status == 1) {
+                                this.$router.push('/admin/notarizedDocuments/list')
+                            }
+                            if ((this.hasPermission(3) && status == 2) || (this.hasPermission(1) && status == 3)) {
+                                this.$router.push('/admin/notarizedDocuments/listMoved')
+                                axios.post('sendNotification', this.notification);
+                            }
+                        }
+                    })
                 }
-            })
+                else {
+                    if (status == 4) {
+                        this.notarized_document.costs = this.selectedCost1.concat(this.selectedCost2, this.selectedCost3);
+                    }
+                    axios.post(`notarizedDocuments/${this.notarizedDocumentId}`, this.notarized_document, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                    }).then(res => {
+                        if (res.data.success) {
+                            if ((this.hasPermission(3) && status == 1)) {
+                                this.$router.push('/admin/notarizedDocuments/list')
+                            }
+                            if ((this.hasPermission(3) && status == 2) || (this.hasPermission(1) && status == 3)
+                                || this.hasPermission(2) && status == 4) {
+                                this.$router.push('/admin/notarizedDocuments/listMoved')
+
+                                if (status != 4) {
+                                    axios.post('sendNotification', this.notification);
+                                }
+                                if (status == 4) {
+                                    this.notification.receiverId = this.notarized_document.manager.id;
+                                    this.notification.message = "Thêm bản lưu trữ";
+                                    axios.post('sendNotification', this.notification);
+                                    axios.post('storages', { notarized_document_id: this.notarizedDocumentId })
+                                }
+                            }
+
+                        }
+                    })
+                }
+            } 
         },
+        showCancelModal(data){
+            this.selectedDocument = data;
+            this.showModalCancel = true;
+        },
+        cancel() {
+            // Kiểm tra xem có lý do hủy không
+            if (!this.selectedDocument.reason) {
+                alert('Vui lòng nhập lý do hủy.');
+                return;
+            }
+
+            // Gửi request PUT để hủy hồ sơ
+            axios.put(`cancelDocument/${this.selectedDocument.id}`, { reason: this.selectedDocument.reason })
+                .then(res => {
+                    if (res.data.success) {
+                        // Gửi thông báo
+                        this.notification.message = 'Hồ sơ ' + this.selectedDocument.id + ' bị hủy';
+                        this.notification.receiverId = this.selectedDocument.notary.id;
+                        axios.post('sendNotification', this.notification);
+
+                        // Chuyển hướng đến trang danh sách hồ sơ
+                        this.$router.push('/admin/notarizedDocuments/listAll');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error cancelling document:', error);
+                    // Xử lý lỗi nếu cần thiết
+                });
+        },
+
         onFileChange(event) {
             this.notarized_document.file = event.target.files[0];
         },
@@ -737,7 +839,7 @@ export default {
                 this.notarized_document.manager = res.data.manager[0];
 
                 this.notarized_document.category_id = res.data.category.id;
-                this.notarized_document.selectedLawTexts = res.data.lawTexts;      
+                this.notarized_document.selectedLawTexts = res.data.lawTexts;
 
             })
         },
@@ -757,12 +859,7 @@ export default {
         },
         async getStaffOfRole(id, resultArray) {
             try {
-                const response = await axios.get('get-staff-with-permission', {
-                    params: {
-                        permission_id: id
-                    }
-                });
-
+                const response = await axios.get(`get-staff-with-permission/${id}`,)
                 // Xóa toàn bộ phần tử trong resultArray và thêm các phần tử mới
                 resultArray.length = 0;
                 resultArray.push(...response.data);
@@ -835,6 +932,7 @@ export default {
             }
 
             this.showList = false;
+            this.validate();
         },
         deleteSelectedCustomer(buttonKey, index) {
             const targetArray = this.notarized_document[`customers${buttonKey}`];
@@ -866,7 +964,7 @@ export default {
         },
     },
     computed: {
-        
+
         paginatedCustomers() {
             const startIndex = (this.currentPage - 1) * this.itemsPerPage;
             const endIndex = startIndex + this.itemsPerPage;
@@ -991,4 +1089,20 @@ export default {
     background-color: #1371d5;
     color: #fff;
 }
+
+.invalid-feedback {
+  color: red;
+  animation: fadeInOut 1s ease-out forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    display: block;
+  }
+
+  100% {
+    display: none !important;
+  }
+}
+
 </style>

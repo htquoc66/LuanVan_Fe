@@ -7,7 +7,6 @@
                 {{ admin.name }}
             </span>
         </div>
-
         <div class="d-flex align-items-center ">
             <div class="dropdown ">
 
@@ -131,7 +130,9 @@ export default {
             }
             else if($notifacation.message.includes('bị hủy')){
                 this.link = 'http://localhost:8080/admin/notarizedDocuments/listCancelled';             
-
+            }
+            else if($notifacation.message.includes('Lịch hẹn lúc')){
+                this.link = 'http://localhost:8080/admin/appointments/myAppointment';             
             }
         },
         formatDateTime(inputDate) {

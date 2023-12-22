@@ -1,12 +1,13 @@
 <template>
-    <div>
+    <div v-if="hasPermission(19) || hasPermission(1)">
+        <div>
         <FormAdd :showModal="showModal" @closeModal="showModal = false" :formIdToEdit="formIdToEdit"
             @resetFormIdToEdit="formIdToEdit = null" :getForms="getForms" />
 
         <div class="card py-5 px-4">
             <h4 class="text-center text-blue">DANH SÁCH BIỂU MẪU</h4>
             <div>
-                <button class="btn-blue px-4 mt-2 mb-3" @click="showModal = true">
+                <button v-show="hasPermission(20)" class="btn-blue px-4 mt-2 mb-3" @click="showModal = true">
                     <i class="fa-solid fa-plus"></i> Thêm mới
                 </button>
             </div>
@@ -35,8 +36,10 @@
                             </button>
 
                             &nbsp;
-                            <button class="btn-icon" @click="showModalPreview(form.link)">
-                                <i class='bx bxs-file-doc'></i> Xem
+                            <button class="btn-icon">
+                                <a target="_blank" :href="form.link">
+                                    <i class='bx bxs-file-doc'></i> xem
+                                </a>
                             </button>
                         </td>
                         <td>
@@ -44,7 +47,7 @@
                                 <i class="fa-solid fa-trash"></i>
                             </button> -->
                             &nbsp;
-                            <button class="btn-icon" @click="editForm(form.id)">
+                            <button v-show="hasPermission(21)" class="btn-icon" @click="editForm(form.id)">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                         </td>
@@ -61,13 +64,20 @@
             <iframe height="100%" :src="link + '/preview'"></iframe>
         </div>
     </div>
+    </div>
+    <div v-else class="not-have-access">
+        <div class="text-center">
+            <h3>Bạn không đủ quyền truy cập!</h3>
+            <RouterLink to="/admin/dashboard" class="mt-3 btn btn-success">Trở về trang chủ</RouterLink>
+        </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
 import FormAdd from './Form.vue'
 import $ from 'jquery'
-import {initializeDataTable} from '@/utils'
+import {hasPermission, initializeDataTable} from '@/utils'
 
 export default {
     name: "ListForms",
@@ -88,7 +98,7 @@ export default {
         this.getForms();
     },
     methods: {
-        initializeDataTable,
+        initializeDataTable,hasPermission,
         async getForms() {
             await axios.get('forms').then(res => {
                 this.forms = res.data;

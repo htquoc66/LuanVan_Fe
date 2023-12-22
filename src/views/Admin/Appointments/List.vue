@@ -90,6 +90,7 @@ export default {
         if (isAvailable) {
           this.appointment.user_id = this.admin.id;
           axios.put(`appointments/${appointment.id}`, this.appointment).then(res => {
+            console.log(res.data);
             if (res.data.success) {
               this.$swal.fire('Cuộc hẹn đã được xác nhận!', '', 'success');
               this.getAppointments();

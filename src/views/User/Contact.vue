@@ -17,7 +17,6 @@
                                    <li class="">Điện thoại: 0909 888 999</li>
                                    <li class="">Fax: 02923 888 999</li>
                                    <li class="">Email: congchungcantho@gmail.com</li>
-
                               </ul>
                          </div>
 
@@ -56,9 +55,6 @@
                                    </div>
                               </div>
 
-
-
-
                               <div class="mt-3">
                                    <div class="rating">
                                         <i v-for="star in 5" :key="star" class="fas fa-star fa-lg"
@@ -80,29 +76,32 @@
                                    <hr>
                                    <div style="min-height: 360px;">
                                         <div v-for="(review, index) in displayedReviews" class="review">
-                                             <div class="review-name d-flex justify-content-between h6 m-0">
-                                                  <div>{{ review.customer.name }}</div>
-                                                  <div class="dropdown">
-                                                       <a href="" class="px-2" data-bs-toggle="dropdown">
-                                                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                                                       </a>
-                                                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                            <li><a class="dropdown-item" href="#">Xóa</a></li>
-                                                       </ul>
+                                             <div>
+                                                  <div class="review-name d-flex justify-content-between h6 m-0">
+                                                       <div>{{ review.customer.name }}</div>
+                                                       <div class="dropdown" v-if="customer.id === review.customer_id">
+                                                            <a href="" class="px-2" data-bs-toggle="dropdown">
+                                                                 <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                                 <li @click="deleteReview(review.id)"><a
+                                                                           class="dropdown-item" href="#">Xóa</a></li>
+                                                            </ul>
+                                                       </div>
                                                   </div>
-                                             </div>
-                                             <div class="review-star">
-                                                  <i v-for="star in review.rating" :key="star"
-                                                       class="fas fa-star fa-sm text-warning"></i>
-                                                  <i v-for="star in (5 - review.rating)" :key="star"
-                                                       class="fas fa-star fa-sm"></i>
+                                                  <div class="review-star">
+                                                       <i v-for="star in review.rating" :key="star"
+                                                            class="fas fa-star fa-sm text-warning"></i>
+                                                       <i v-for="star in (5 - review.rating)" :key="star"
+                                                            class="fas fa-star fa-sm"></i>
 
-                                             </div>
-                                             <div class="review-content">
-                                                  {{ review.content }}
-                                             </div>
-                                             <div class="review-time">
-                                                  {{ review.created_at }}
+                                                  </div>
+                                                  <div class="review-content">
+                                                       {{ review.content }}
+                                                  </div>
+                                                  <div class="review-time">
+                                                       {{ review.created_at }}
+                                                  </div>
                                              </div>
                                              <hr>
                                         </div>
@@ -174,6 +173,27 @@ export default {
           this.customer = JSON.parse(storeData).user;
      },
      methods: {
+          async deleteReview(id) {
+               const result = await this.$swal.fire({
+                    title: 'Bạn có chắc chắn muốn hủy lịch hẹn?',
+                    icon: 'warning',
+                    showDenyButton: false,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Đồng ý',
+                    cancelButtonText: 'Hủy',
+               });
+               if (result.isConfirmed) {
+                    axios.delete(`reviews/${id}`).then(res => {
+                         if (res.data.success) {
+                              this.getAllReviews();
+                              this.$swal.fire('Đã xóa thành công!', '', 'success');
+
+                         }
+                    })
+               }
+          },
           getAllReviews() {
                axios.get('reviews').then(res => {
                     this.reviews = res.data;
@@ -264,10 +284,20 @@ export default {
           displayedReviews() {
                const startIndex = (this.currentPage - 1) * this.pageSize;
                const endIndex = startIndex + this.pageSize;
-               return this.reviews.slice(startIndex, endIndex);
+
+               // Lọc các đánh giá có status là 2
+               const filteredReviews = this.reviews.filter(review => review.status === 2);
+
+               // Trả về phần của mảng sau khi đã lọc
+               return filteredReviews.slice(startIndex, endIndex);
           },
+
           totalPages() {
-               return Math.ceil(this.reviews.length / this.pageSize);
+               // Lọc các đánh giá có status là 2
+               const validReviews = this.reviews.filter(review => review.status === 2);
+
+               // Tính tổng số trang dựa trên số lượng đánh giá hợp lệ và kích thước trang
+               return Math.ceil(validReviews.length / this.pageSize);
           },
      },
 };

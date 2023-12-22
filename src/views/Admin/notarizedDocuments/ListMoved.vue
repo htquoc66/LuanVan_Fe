@@ -1,7 +1,8 @@
 <template>
   <div>
     <h4 class="text-center text-blue mt-2">DANH SÁCH HỒ SƠ</h4>
-      <button class="btn-blue my-2" v-if="selectedNotarizedDocuments.length > 0" @click="taophieuthu()">Tạo phiếu thu</button>
+    <button class="btn-blue my-2" v-if="selectedNotarizedDocuments.length > 0" @click="taophieuthu()">Tạo phiếu
+      thu</button>
 
     <table v-if="hasPermission(2)" class="myTable table table-striped  table-bordered ">
       <thead class="">
@@ -16,7 +17,7 @@
           <th>Tổng phí</th>
           <th>Trạng thái</th>
           <th>Ngày tạo</th>
-          <th v-if="hasPermission(1)">Tùy chọn</th>
+          <th>Tùy chọn</th>
         </tr>
       </thead>
       <tbody>
@@ -40,6 +41,11 @@
               </button>
             </RouterLink>
           </td>
+          <td v-if="hasPermission(2)">
+            <button @click="returnCost(notarizedDocument.id)" class="btn-icon">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+          </td>
         </tr>
 
       </tbody>
@@ -56,7 +62,7 @@
           <th>CCV</th>
           <th>Trạng thái</th>
           <th>Ngày tạo</th>
-          <th >Tùy chọn</th>
+          <th>Tùy chọn</th>
         </tr>
       </thead>
       <tbody>
@@ -80,13 +86,15 @@
             <span class="text-danger" v-if="notarizedDocument.status == 3">Chờ kế toán duyệt</span>
           </td>
           <td>{{ formatDate(notarizedDocument.date) }}</td>
-          <td  class="text-center">
-            <!-- <button class="btn-icon">
-              <i class="fa-solid fa-trash"></i>
-            </button> -->
+          <td class="text-center">
+            <button v-if="hasPermission(3)" @click="updateStatus(notarizedDocument.id)" class="btn-icon">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            &nbsp;
             <RouterLink class="text-a" :to="{ name: 'formNotarizedDocuments', query: { id: notarizedDocument.id } }">
               <button class="btn-icon">
-                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-magnifying-glass"></i>
+
               </button>
             </RouterLink>
           </td>
@@ -130,8 +138,8 @@ export default {
   },
   methods: {
     formatDate, formatPrice, initializeDataTable, hasPermission,
-    taophieuthu(){
-      this.$store.dispatch('setSelectedNotarizedDocuments', this.selectedNotarizedDocuments);                
+    taophieuthu() {
+      this.$store.dispatch('setSelectedNotarizedDocuments', this.selectedNotarizedDocuments);
       this.$router.push({ name: 'Invoice' })
     },
     toggleSelectAll() {
@@ -167,7 +175,56 @@ export default {
           this.notarizedDocuments = res.data;
           this.initializeDataTable();
         })
+    },
+    updateStatus(id) {
+      this.$swal.fire({
+        title: 'Bạn muốn chỉnh sửa hồ sơ chờ duyệt?',
+        icon: 'warning',
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.put(`update-status/${id}/1`).then(res => {
+            if (res.data.success) {
+              // Chuyển hướng đến trang cụ thể với ID
+              this.$router.push(`/admin/notarizedDocuments/form?id=${id}`);
+            }
+          }).catch(error => {
+            // Xử lý lỗi nếu có
+            console.error('Có lỗi xảy ra khi cập nhật trạng thái:', error);
+          });
+        }
+      });
+    },
+    returnCost(id) {
+      this.$swal.fire({
+        title: 'Bạn muốn tính phí hồ sơ lại?',
+        icon: 'warning',
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Hủy',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.put(`update-status/${id}/3`).then(res => {
+            if (res.data.success) {
+              // Chuyển hướng đến trang cụ thể với ID
+              this.$router.push(`/admin/notarizedDocuments/form?id=${id}`);
+            }
+          }).catch(error => {
+            // Xử lý lỗi nếu có
+            console.error('Có lỗi xảy ra khi cập nhật trạng thái:', error);
+          });
+        }
+      });
     }
+
   },
 
 

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="hasPermission(3)">
         <h4 class="text-center text-blue mt-2">DANH SÁCH HỒ SƠ</h4>
         <table class="myTable table table-striped  table-bordered ">
             <thead class="">
@@ -11,7 +11,8 @@
                     <th>Khách hàng B</th>
                     <th>CCV</th>
                     <th>Trạng thái</th>
-                    <th>Ngày tạo</th>
+                    <th>Lý do</th>
+                    <!-- <th>Ngày tạo</th> -->
                     <th>Tùy chọn</th>
                 </tr>
             </thead>
@@ -32,14 +33,17 @@
                     </td>
                     <td>{{ notarizedDocument.notary[0].name }}</td>
                     <td>
-                        <span v-if="notarizedDocument.status == 0">Bị hủy</span>
+                        <span class="text-danger" v-if="notarizedDocument.status == 0">Bị hủy</span>
                        
                     </td>
-                    <td>{{ formatDate(notarizedDocument.date) }}</td>
+                    <td>
+                      {{ notarizedDocument.reason }}
+                    </td>
+                    <!-- <td>{{ formatDate(notarizedDocument.date) }}</td> -->
                     <td class="text-center">
-                        <button class="btn-icon" v-if="hasPermission(3) || hasPermission(4)">
+                        <!-- <button class="btn-icon" v-if="hasPermission(3) || hasPermission(4)">
                             <i class="fa-solid fa-trash"></i>
-                        </button>
+                        </button> -->
                         &nbsp;
                         <RouterLink class="text-a"
                             :to="{ name: 'formNotarizedDocuments', query: { id: notarizedDocument.id } }">

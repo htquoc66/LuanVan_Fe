@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-if="hasPermission(1) || hasPermission(3) || hasPermission(54)">
     <FormCategory :showModal="showModal" @closeModal="showModal = false" :categoryIdToEdit="categoryIdToEdit"
       :getCategories="getCategories" @resetCategoryId="categoryIdToEdit = null" />
 
     <div class="card py-5 px-4">
       <h4 class="text-center text-blue">DANH SÁCH DANH MỤC</h4>
       <div>
-        <button class="btn-blue px-4 mt-2 mb-3" @click="showModal = true">
+        <button v-show="hasPermission(55)" class="btn-blue px-4 mt-2 mb-3" @click="showModal = true">
           <i class="fa-solid fa-plus"></i> Thêm mới
         </button>
       </div>
@@ -26,11 +26,11 @@
             <td>{{ formatPrice(category.price) }}</td>
 
             <td>
-              <button class="btn-icon" @click="deleteCategory(category.id)">
+              <!-- <button class="btn-icon" @click="deleteCategory(category.id)">
                 <i class="fa-solid fa-trash"></i>
-              </button>
+              </button> -->
               &nbsp;
-              <button class="btn-icon mt-1" @click="editCategory(category.id)">
+              <button v-show="hasPermission(56)" class="btn-icon mt-1" @click="editCategory(category.id)">
                 <i class="fa-solid fa-pen-to-square"></i>
               </button>
             </td>
@@ -39,12 +39,18 @@
       </table>
     </div>
   </div>
+  <div v-else class="not-have-access">
+        <div class="text-center">
+            <h3>Bạn không đủ quyền truy cập!</h3>
+            <RouterLink to="/admin/dashboard" class="mt-3 btn btn-success">Trở về trang chủ</RouterLink>
+        </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
 import FormCategory from './Form.vue';
-import {initializeDataTable, formatPrice} from '@/utils'
+import {initializeDataTable, formatPrice, hasPermission} from '@/utils'
 
 export default {
   name: 'ListCategories',
@@ -62,7 +68,7 @@ export default {
     this.getCategories();
   },
   methods: {
-    initializeDataTable, formatPrice,
+    initializeDataTable, formatPrice, hasPermission,
     editCategory(id) {
       this.categoryIdToEdit = id;
       this.showModal = true;

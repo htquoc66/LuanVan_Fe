@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="hasPermission(1) || hasPermission(2)">
         <h4 class="text-center text-blue py-2">Danh sách phiếu thu</h4>
         <table class="myTable table table-striped  table-bordered ">
             <thead>
@@ -41,7 +41,7 @@
 
 <script>
 import axios from 'axios';
-import { initializeDataTable, formatDate, formatPrice } from '@/utils';
+import { initializeDataTable, formatDate, formatPrice, hasPermission } from '@/utils';
 
 export default {
     data() {
@@ -60,7 +60,7 @@ export default {
         this.getInvoices();
     },
     methods: {
-        initializeDataTable,formatDate,formatPrice,
+        initializeDataTable,formatDate,formatPrice, hasPermission,
         printf(file){
             this.showModal = true;
             this.url = 'http://127.0.0.1:8000/storage/pdfs/'+ file;

@@ -2,7 +2,7 @@
     <div>
         <div class="row mb-3">
             <div class="col-4">
-                <div  class="card py-3">
+                <div class="card py-3">
                     <RouterLink to="/admin/appointments/listAppointments" class="text-dark">
                         <div class="d-flex">
                             <div class="mx-3 mb-0 alert alert-primary">
@@ -48,16 +48,20 @@
         </div>
 
         <div class="row">
-            <div class="d-flex justify-content-end">
-                <button class="btn-blue mb-3" @click="exportToExcel">
-                    <i class="fa-solid fa-file-excel"></i> Xuất Excel
-                </button>
-            </div>
             <div class="col-8">
                 <div class="card cardChar p-3">
                     <div>
-                        Từ ngày: <input v-model="minDate1" type="date" @change="updateChart">
-                        đến <input v-model="maxDate1" type="date" @change="updateChart">
+                        Từ ngày: <input v-model="minDate1" type="date" :max="maxDate1">
+                        đến <input v-model="maxDate1" type="date" :min="minDate1" :max="today">
+                        &nbsp;
+                        <button class="btn-blue" @click="updateChart()">
+                            <i class="fa-solid fa-filter"></i>
+                            Lọc
+                        </button>
+                        &nbsp;
+                        <button class="btn-blue mb-3" @click="exportToExcel">
+                            <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                        </button>
                     </div>
                     <div class="p-2">
                         <canvas id="chartBar"></canvas>
@@ -98,6 +102,7 @@ export default {
         const minDate = addDays(currentDate, -30);
         return {
             document_today: null,
+            today: new Date().toISOString().split('T')[0],
             minDate1: format(minDate, 'yyyy-MM-dd'),
             maxDate1: format(currentDate, 'yyyy-MM-dd'),
             dataCharPie: [],
@@ -107,7 +112,7 @@ export default {
             chartLine: null,
             chartBar: null,
             appointments: [],
-            customers:[],
+            customers: [],
 
         };
     },
@@ -115,13 +120,13 @@ export default {
         this.getCountDocumentToday();
         this.createChartLine();
         this.createChartPie();
-        this.createChartBar(); 
+        this.createChartBar();
         this.getAppointments();
         this.getCustomers();
     },
     methods: {
-        async getCustomers(){
-            await axios.get('customers').then(res=>{
+        async getCustomers() {
+            await axios.get('customers').then(res => {
                 this.customers = res.data;
             })
         },
@@ -200,16 +205,21 @@ export default {
             })
         },
         updateChart() {
+
             if (this.chartPie) {
                 this.chartPie.destroy();
             }
+
             if (this.chartLine) {
                 this.chartLine.destroy();
             }
+
+            // Tạo lại biểu đồ mới
             this.createChartLine();
             this.createChartPie();
             this.createChartBar(); // Thêm dòng này để tạo biểu đồ Bar khi ngày thay đổi
         },
+
         createChartBar() {
             axios.get(`revenueByCategory/${this.minDate1}/${this.maxDate1}`).then((res) => {
                 this.dataCharBar = res.data;

@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-if="hasPermission(1) || hasPermission(3) || hasPermission(6)">
     <FormCustomer :showModal="showModal" @closeModal="showModal = false" :getCustomers="getCustomers"
       :customerIdToEdit="customerIdToEdit" @reset-customer-id="customerIdToEdit = null" />
 
     <div class="card py-5 px-4">
       <h4 class="text-center text-blue">DANH SÁCH KHÁCH HÀNG</h4>
       <div class="">
-        <button class="btn-blue px-4 mt-2 mb-3" @click="showModal = true">
+        <button v-show="hasPermission(7)" class="btn-blue px-4 mt-2 mb-3" @click="showModal = true">
           <i class="fa-solid fa-plus"></i> Thêm mới
         </button>
         &nbsp;
@@ -21,8 +21,8 @@
             <th>Loại KH</th>
             <th>Họ tên</th>
             <th>Ngày sinh</th>
-            <th style="width: 20% !important;">Giới tính</th>
             <th>Email</th>
+            <th>Giới tính</th>
             <th>Sđt</th>
             <th>Tùy chọn</th>
           </tr>
@@ -43,11 +43,11 @@
               </p>
 
             </td>
-            <td>{{ customer.gender }}
+            <td>{{ customer.email }}
               <p v-if="customer.expanded" class="mt-2 mb-0"><strong>Địa chỉ:</strong> {{ customer.address }}</p>
 
             </td>
-            <td>{{ customer.email }}
+            <td>{{ customer.gender }}
             </td>
             <td>{{ customer.phone }}</td>
             <td>
@@ -58,7 +58,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
               &nbsp;
-              <button class="btn-icon mt-1" @click="editCustomer(customer.id)">
+              <button v-show="hasPermission(8)" class="btn-icon mt-1" @click="editCustomer(customer.id)">
                 <i class="fa-solid fa-pen-to-square"></i>
               </button>
             </td>
@@ -67,6 +67,12 @@
       </table>
     </div>
   </div>
+  <div v-else class="not-have-access">
+        <div class="text-center">
+            <h3>Bạn không đủ quyền truy cập!</h3>
+            <RouterLink to="/admin/dashboard" class="mt-3 btn btn-success">Trở về trang chủ</RouterLink>
+        </div>
+    </div>
 
   <div class="modal-container" v-show="showList">
     <div class="modal-overlay" @click="showList = false"></div>

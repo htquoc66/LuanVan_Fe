@@ -2,6 +2,8 @@
     <div class="modal-container" v-show="showModal">
         <div class="modal-overlay" @click="closeModal"></div>
         <div class="modal-content" style="width: 80vw;">
+    {{ selectedPermissions }}
+
             <span class="modal-close" @click="closeModal"><i class="fa-solid fa-circle-xmark"></i></span>
             <h4 class="text-center my-4 text-blue">Thông tin vai trò</h4>
             <form>
@@ -16,7 +18,7 @@
                     <div>Chọn quyền cho vai trò:</div>
                     <div class="d-flex justify-content-around mb-2">
                         <div class="form-check">
-                            <input @change="test(1)" class="form-check-input" type="radio" name="flexRadioDefault" id="id1">
+                            <input @change="test(1)"  class="form-check-input" type="radio" name="flexRadioDefault" id="id1">
                             <label class="form-check-label" for="id1">
                                 Trưởng phòng công chứng
                             </label>
@@ -28,7 +30,10 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input checked @change="test(3)" class="form-check-input" type="radio" name="flexRadioDefault" id="id3">
+                            <input v-if="roleIdToEdit" @change="test(3)" class="form-check-input" type="radio" name="flexRadioDefault" id="id3">
+                            <input v-else checked @change="test(3)" class="form-check-input" type="radio" name="flexRadioDefault" id="id3">
+                           
+
                             <label class="form-check-label" for="id3">
                                 Công chứng viên
                             </label>
@@ -117,7 +122,10 @@ export default {
 
     created() {
         this.getPermissions();
+        if(this.roleIdToEdit == null){
         this.test(3);
+
+        }
     },
     watch: {
         roleIdToEdit(newId, oldId) {
@@ -127,20 +135,20 @@ export default {
     methods: {
         test(groupId) {
             if (groupId == 1) {
-                this.selectedPermissions = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+                this.selectedPermissions = [1, 6, 7, 8, 9, 10, 11, 12, 14,15,16,17, 18, 23, 24, 25, 26, 51, 19, 20, 21, 22, 31, 32, 33, 34, 58, 53, 52, 57, 56, 55, 54, 30, 29, 28, 27];
             }
             if (groupId == 2) {
-                this.selectedPermissions = [2, 10];
+                this.selectedPermissions = [2, 15, 19, 31, 32, 33, 34, 54];
             }
             if (groupId == 3) {
-                this.selectedPermissions = [3, 6, 7, 8, 10, 11, 12, 13, 15, 16, 17, 19, 20, 21, 22];
+                this.selectedPermissions = [3, 6, 7, 8, 11, 12, 15, 16, 17, 19, 31, 54, 55, 56 ];
             }
-            if (groupId == 4) {
-                this.selectedPermissions = [4, 6, 7, 8, 10, 11, 12, 15, 19, 20, 21, 22];
-            }
-            if (groupId == 5) {
-                this.selectedPermissions = [5];
-            }
+            // if (groupId == 4) {
+            //     this.selectedPermissions = [4, 6, 7, 8, 10, 11, 12, 15, 19, 20, 21, 22];
+            // }
+            // if (groupId == 5) {
+            //     this.selectedPermissions = [5];
+            // }
         },
         async getRole(roleId) {
             await axios.get(`roles/${roleId}`).then(res => {

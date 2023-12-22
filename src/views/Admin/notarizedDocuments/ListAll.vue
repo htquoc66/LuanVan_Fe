@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="hasPermission(1)">
         <h4 class="text-center text-blue mt-2">DANH SÁCH HỒ SƠ</h4>
         <div class="">
 
@@ -74,7 +74,7 @@
 
 <script>
 import axios from 'axios';
-import { formatDate, initializeDataTable } from '@/utils';
+import { formatDate, initializeDataTable, hasPermission } from '@/utils';
 import ExcelJS from 'exceljs';
 
 export default {
@@ -93,7 +93,7 @@ export default {
         this.getNotarizedDocuments(this.admin.id)
     },
     methods: {
-        formatDate, initializeDataTable,
+        formatDate, initializeDataTable, hasPermission,
         async exportToExcel() {
             try {
                 const workbook = new ExcelJS.Workbook();

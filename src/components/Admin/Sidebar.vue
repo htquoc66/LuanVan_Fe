@@ -18,7 +18,7 @@
                     <span class="text">Quản lý lịch hẹn</span>
                 </RouterLink>
             </li>
-            <li v-if="hasPermission(1) || hasPermission(3)" :class="{ active: $route.path ==='/admin/customers' }">
+            <li v-if="hasPermission(1) || hasPermission(3) || hasPermission(6)" :class="{ active: $route.path ==='/admin/customers' }">
                 <RouterLink to="/admin/customers">
                     <i class='bx bxs-group'></i>
                     <span class="text">Quản lý khách hàng</span>
@@ -36,40 +36,47 @@
                     <span class="text">Quản lý lưu trữ</span>
                 </RouterLink>
             </li>
-
-            <li v-if="hasPermission(1) || hasPermission(3)" :class="{ active: $route.path === '/admin/lawTexts' }">
+            <li v-if="hasPermission(1) || hasPermission(3) || hasPermission(54)" :class="{ active: $route.path === '/admin/categories' }">
+                <RouterLink to="/admin/categories">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Quản lý danh mục</span>
+                </RouterLink>
+            </li>
+            <li v-if="hasPermission(1) || hasPermission(3) || hasPermission(15)" :class="{ active: $route.path === '/admin/lawTexts' }">
                 <RouterLink to="/admin/lawTexts">
                     <i class='bx bxs-news'></i>
                     <span class="text">Quản lý văn bản pháp luật</span>
                 </RouterLink>
             </li>
-            <li v-if="hasPermission(1)" :class="{ active: $route.path === '/admin/forms' }">
+            <li v-if="hasPermission(19)" :class="{ active: $route.path === '/admin/forms' }">
                 <RouterLink to="/admin/forms">
                     <i class='bx bxs-book-content'></i>
                     <span class="text">Quản lý biểu mẫu</span>
                 </RouterLink>
             </li>
 
-            <li v-if="hasPermission(1) || hasPermission(2)" :class="{ active: $route.path === '/admin/costs' }">
+            <li v-if="hasPermission(1) || hasPermission(2) || hasPermission(31)" :class="{ active: $route.path === '/admin/costs' }">
                 <RouterLink to="/admin/costs">
                     <i class='bx bxs-dollar-circle'></i>
                      <span class="text">Quản lý chi phí</span>
                 </RouterLink>
             </li>
 
-            <li v-if="hasPermission(1)" :class="{ active: $route.path.includes('/admin/staffs') }">
+            <li v-if="hasPermission(1) || hasPermission(23)" :class="{ active: $route.path.includes('/admin/staffs') }">
                 <RouterLink to="/admin/staffs/listStaffs">
                     <i class='bx bxs-briefcase'></i>
                     <span class="text">Quản lý nhân viên</span>
                 </RouterLink>
             </li>
 
-            <li v-if="hasPermission(1) || hasPermission(3)" :class="{ active: $route.path === '/admin/categories' }">
-                <RouterLink to="/admin/categories">
-                    <i class='bx bxs-dashboard'></i>
-                    <span class="text">Quản lý danh mục</span>
+            <li v-if="hasPermission(1) || hasPermission(58)" :class="{ active: $route.path.includes('/admin/checkReviews') }">
+                <RouterLink to="/admin/checkReviews">
+                    <i class='bx bxs-star'></i>
+                    <span class="text">Quản lý đánh giá</span>
                 </RouterLink>
             </li>
+
+
 
             <li v-if="hasPermission(1)" :class="{ active: $route.path === '/admin/setting' }">
                 <RouterLink to="/admin/setting">

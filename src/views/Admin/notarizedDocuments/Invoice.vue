@@ -168,8 +168,10 @@
             Hotline: 0909 888 999 - Email: congchungcantho@gmail.com
           </div>
         </div>
-        <div class="text-center mt-3">
-          <i>Ngày: {{ formatDate(invoices.date) }}</i>
+        <div class="text-center">
+          <!-- <i>Ngày: {{ formatDate(invoices.date) }}</i> -->
+          <img v-if="qrCodeDataURL" :src="qrCodeDataURL" alt="QR Code" style="width: 100px;height: 100px;" />
+
         </div>
       </div>
 
@@ -213,6 +215,11 @@
             </tr>
             <tr>
               <td colspan="2" class="text-right">
+                Giảm giá: <b v-if="selectedCustomer.type_id == 2">5 %</b> <b v-else>0 %</b>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="text-right">
                 Tổng tiền phí: <b>{{ formatPrice(invoices.cost) }}</b>
               </td>
             </tr>
@@ -247,7 +254,16 @@ export default {
         file_pdf: '',
         notarizedDocument_id: [],
       },
-      fileName: ''
+      fileName: '',
+      accountInfo: {
+        accountNo: '',
+        accountName: '',
+        acqId: '',
+        amount: '',
+        addInfo: '',
+      },
+      qrCodeDataURL: null,
+
 
     };
   },
@@ -264,11 +280,16 @@ export default {
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split('T')[0];
     this.invoices.date = formattedDate;
-
+    this.getAcountInfo();
   },
   methods: {
     formatPrice, formatDate,
     convertNumberToWords,
+    getAcountInfo(){
+      axios.get('get-bank-info').then(res=>{
+        this.accountInfo = res.data;
+      })
+    },
     generatePDF() {
       if (this.selectedCustomer === '') {
         alert('Chọn khách hàng');
@@ -379,13 +400,51 @@ export default {
       this.selectedNotarizedDocuments.forEach((document) => {
         totalCost += document.total_cost;
       });
-      this.invoices.cost = totalCost;
+      if (this.selectedCustomer.type_id == 2) {
+        this.invoices.cost = totalCost - (totalCost * 0.05);
+
+      } else {
+        this.invoices.cost = totalCost;
+
+      }
+
     },
 
     addSelectedCustomer(customer) {
       // Thêm khách hàng đã chọn vào mảng selectedCustomer
       this.selectedCustomer = customer
       this.invoices.customer_id = this.selectedCustomer.id;
+      this.calculateTotalCost();
+      this.accountInfo.addInfo = this.invoices.content
+      this.accountInfo.amount = this.invoices.cost;
+      this.generateQRCode();
+    },
+
+    async generateQRCode() {
+      try {
+        const response = await this.callApi();
+        if (response.code === '00') {
+          this.qrCodeDataURL = response.data.qrDataURL;
+        } else {
+          console.error('Failed to generate QR Code:', response.desc);
+        }
+      } catch (error) {
+        console.error('Error while calling API:', error);
+      }
+    },
+    async callApi() {
+      const apiUrl = 'https://api.vietqr.io/v2/generate';
+
+      try {
+        const response = await axios.post(apiUrl, {
+          ...this.accountInfo,
+          template: 'qr_only',
+        });
+
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
     },
 
 
@@ -439,6 +498,5 @@ export default {
   margin: 0;
   color: #fff;
 }
-
 </style>
   

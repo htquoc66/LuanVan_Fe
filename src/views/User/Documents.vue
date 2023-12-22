@@ -43,7 +43,7 @@
 
                 </div>
             </div>
-
+            
             <div class="col-md-4 side">
                 <div class="card px-2 h-100">
                     <div class="text-center text-blue py-3">
@@ -81,7 +81,9 @@ export default {
     data() {
         return {
             documents: [],
-            customer: []
+            customer: [],
+            searchKeyword: '',
+
         }
     },
     created() {
@@ -96,10 +98,11 @@ export default {
         formatDate, formatPrice, initializeDataTable,
         getDocuments() {
             axios.get(`notarizedDocuments/customer-${this.customer.id}`).then(res => {
-                this.documents = res.data;
+                this.documents = res.data.filter((document) => document.status >= 2);
                 this.initializeDataTable();
             })
-        }
+        },
+
     }
 }
 </script>

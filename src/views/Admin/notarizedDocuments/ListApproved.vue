@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="hasPermission(3)">
         <h4 class="text-center text-blue mt-2">DANH SÁCH HỒ SƠ</h4>
         <table class="myTable table table-striped  table-bordered ">
             <thead class="">
@@ -38,7 +38,7 @@
                     </td>
                     <td>{{ formatDate(notarizedDocument.date) }}</td>
                     <td class="text-center">
-      
+
                         <RouterLink class="text-a"
                             :to="{ name: 'formNotarizedDocuments', query: { id: notarizedDocument.id } }">
                             <button class="btn-icon">
@@ -79,12 +79,14 @@ export default {
     methods: {
         formatDate, initializeDataTable, hasPermission,
         getNotarizedDocuments(userId) {
-        axios.get(`notarizedDocuments/user-${userId}`)
-            .then((res) => {
-                this.notarizedDocuments = res.data;
-                this.initializeDataTable();
-            })
-    }
+            axios.get(`notarizedDocuments/user-${userId}`)
+                .then((res) => {
+                    // this.notarizedDocuments = res.data;
+                    this.notarizedDocuments = res.data.filter(doc => doc.status >= 3);
+
+                    this.initializeDataTable();
+                })
+        }
 
     }
 

@@ -21,19 +21,19 @@
                     <div class="col-4">
                         <div class="form-groups mb-3">
                             <label class="form-label">Họ tên:</label>
-                            <input v-model="customer.name" type="text" class="form-control">
+                            <input required v-model="customer.name" type="text" class="form-control">
                         </div>
                         <div class="form-groups mb-3">
                             <label class="form-label">Số CCCD:</label>
-                            <input v-model="customer.idCard_number" type="text" class="form-control">
+                            <input required v-model="customer.idCard_number" type="text" class="form-control">
                         </div>
                         <div class="form-groups mb-3">
                             <label class="form-label">Ngày cấp:</label>
-                            <input v-model="customer.idCard_issued_date" type="date" class="form-control" />
+                            <input required v-model="customer.idCard_issued_date" type="date" class="form-control" />
                         </div>
                         <div class="form-groups mb-3">
                             <label class="form-label">Nơi cấp:</label>
-                            <input v-model="customer.idCard_issued_place" type="text" class="form-control">
+                            <input required v-model="customer.idCard_issued_place" type="text" class="form-control">
                         </div>
 
                     </div>
@@ -47,16 +47,16 @@
                         </div>
                         <div class="form-groups mb-3">
                             <label class="form-label">Ngày sinh:</label>
-                            <input v-model="customer.date_of_birth" type="date" class="form-control" />
+                            <input required v-model="customer.date_of_birth" type="date" class="form-control" />
 
                         </div>
                         <div class="form-groups mb-3">
                             <label class="form-label">Số điện thoại:</label>
-                            <input v-model="customer.phone" type="text" class="form-control">
+                            <input required v-model="customer.phone" type="text" class="form-control">
                         </div>
                         <div class="form-groups mb-3">
                             <label class="form-label">Email:</label>
-                            <input v-model="customer.email" type="email" class="form-control">
+                            <input required v-model="customer.email" type="email" class="form-control">
                         </div>
                     </div>
                     <div class="col-4">
@@ -86,7 +86,7 @@
                         </div>
                         <div class="form-groups mb-3">
                             <label class="form-label">Địa chỉ cụ thể:</label>
-                            <input v-model="address" type="text" class="form-control">
+                            <input required v-model="address" type="text" class="form-control">
                         </div>
                     </div>
                 </div>

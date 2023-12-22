@@ -196,6 +196,11 @@ const routes = [
         name: "setting",
         component: () => import("../views/Admin/Setting.vue"),
       },
+      {
+        path: "checkReviews",
+        name: "checkReviews",
+        component: () => import("../views/Admin/CheckReviews.vue"),
+      },
     ],
   },
 ];

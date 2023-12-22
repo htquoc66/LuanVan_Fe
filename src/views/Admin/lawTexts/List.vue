@@ -1,11 +1,12 @@
 <template>
-    <FormLawText :showModal="showModal" @closeModal="showModal = false" :getLawTexts="getLawTexts"
+    <div v-if="hasPermission(1) || hasPermission(3) || hasPermission(15)">
+        <FormLawText :showModal="showModal" @closeModal="showModal = false" :getLawTexts="getLawTexts"
         :lawTextIdToEdit="lawTextIdToEdit" @reset-lawText-id="lawTextIdToEdit = null" />
 
     <div class="card px-5 py-4">
         <h4 class="text-center text-blue">VĂN BẢN PHÁP LUẬT</h4>
         <div>
-            <button class="btn-blue px-4 mt-2 mb-3" @click="showModal = true">
+            <button v-show="hasPermission(16)" class="btn-blue px-4 mt-2 mb-3" @click="showModal = true">
                 <i class="fa-solid fa-plus"></i> Thêm mới
             </button>
         </div>
@@ -44,7 +45,7 @@
                             <i class="fa-solid fa-trash"></i>
                         </button> -->
                         &nbsp;
-                        <button class="btn-icon" @click="editLawText(lawText.id)">
+                        <button v-show="hasPermission(17)" class="btn-icon" @click="editLawText(lawText.id)">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                     </td>
@@ -52,11 +53,18 @@
             </tbody>
         </table>
     </div>
+    </div>
+    <div v-else class="not-have-access">
+        <div class="text-center">
+            <h3>Bạn không đủ quyền truy cập!</h3>
+            <RouterLink to="/admin/dashboard" class="mt-3 btn btn-success">Trở về trang chủ</RouterLink>
+        </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
-import { formatDate, initializeDataTable } from '@/utils';
+import { formatDate, hasPermission, initializeDataTable } from '@/utils';
 import FormLawText from './Form.vue';
 import $ from 'jquery';
 export default {
@@ -75,7 +83,7 @@ export default {
         this.getLawTexts();
     },
     methods: {
-        formatDate, initializeDataTable,
+        formatDate, initializeDataTable,hasPermission,
         editLawText(id) {
             this.lawTextIdToEdit = id;
             this.showModal = true;

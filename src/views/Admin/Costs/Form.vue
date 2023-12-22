@@ -15,11 +15,11 @@
 
                 <div class="form-groups mb-3">
                     <label class="form-label">Tên chi phí:</label>
-                    <input type="text" v-model="cost.name" class="form-control">
+                    <input required type="text" v-model="cost.name" class="form-control">
                 </div>
                 <div class="form-groups mb-3">
                     <label class="form-label">Giá chi phi:</label>
-                    <input type="text" v-model="cost.price" class="form-control">
+                    <input required type="text" v-model="cost.price" class="form-control">
                 </div>
 
                 <div class="d-flex justify-content-between mt-5">
